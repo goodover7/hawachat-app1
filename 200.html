@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="ar">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#0D0D1A" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="هوا شات" />
+    <meta name="color-scheme" content="dark" />
+    <title>هوا شات | دردشة عربية وشات مجاني</title>
+
+    <!-- ✅ تسجيل SW في <head> — يمسح cache قديم فوراً -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js?v=9', { updateViaCache: 'none' })
+          .then(function(reg) {
+            // إذا يوجد SW جديد انتظر → أجبره على الاستخدام الفوري
+            if (reg.waiting) { reg.waiting.postMessage({ type: 'SKIP_WAITING' }); }
+            reg.addEventListener('updatefound', function() {
+              var newSW = reg.installing;
+              if (newSW) {
+                newSW.addEventListener('statechange', function() {
+                  if (newSW.state === 'installed' && reg.active) {
+                    newSW.postMessage({ type: 'SKIP_WAITING' });
+                  }
+                });
+              }
+            });
+          })
+          .catch(function(){});
+        // عند تغيير SW: reload الصفحة لأخذ النسخة الجديدة
+        navigator.serviceWorker.addEventListener('controllerchange', function() {
+          window.location.reload();
+        });
+      }
+    </script>
+
+    <!-- ══ SEO الأساسي المحسّن ══ -->
+    <meta name="description" content="هوا شات — شات عربي مجاني ودردشة مع الأصدقاء. تعارف وتواصل في غرف شات حية. أفضل تطبيق دردشة عربية، اصدقاء جدد، شات مجاني، تعارف، تواصل اجتماعي عربي!" />
+    <meta name="keywords" content="شات, دردشة, هوا شات, شات عربي, دردشة عربية, شات مجاني, تعارف, تواصل, اصدقاء, غرف شات, دردشة مجانية, تواصل اجتماعي, شات اون لاين, دردشة حية, محادثة عربية" />
+    <meta name="author" content="هوا شات" />
+    <meta name="google-site-verification" content="EywhkgLeAEbVTYt8oQTMEoc79QRIavQbYxMVHLuQWk4" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large" />
+    <meta name="rating" content="general" />
+    <meta name="language" content="Arabic" />
+    <meta name="revisit-after" content="3 days" />
+    <meta name="category" content="شات, دردشة, تواصل اجتماعي" />
+    <link rel="canonical" href="https://hawachat-app.netlify.app/" />
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="https://hawachat-app.netlify.app/sitemap.xml" />
+
+    <!-- Open Graph المحسّن -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://hawachat-app.netlify.app/" />
+    <meta property="og:title" content="هوا شات | شات عربي مجاني — دردشة وتعارف وتواصل" />
+    <meta property="og:description" content="هوا شات — شات عربي مجاني، دردشة حية، تعارف، تواصل مع أصدقاء جدد. انضم الآن!" />
+    <meta property="og:image" content="https://hawachat-app.netlify.app/logo.png" />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    <meta property="og:image:alt" content="هوا شات — تطبيق الشات العربي" />
+    <meta property="og:locale" content="ar_AR" />
+    <meta property="og:site_name" content="هوا شات" />
+
+    <!-- Twitter Card المحسّن -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://hawachat-app.netlify.app/" />
+    <meta name="twitter:title" content="هوا شات | شات عربي مجاني — دردشة وتعارف وتواصل" />
+    <meta name="twitter:description" content="هوا شات — شات عربي مجاني، دردشة حية، تعارف وتواصل مع أصدقاء جدد!" />
+    <meta name="twitter:image" content="https://hawachat-app.netlify.app/logo.png" />
+    <meta name="twitter:image:alt" content="هوا شات — تطبيق الشات العربي" />
+
+    <!-- JSON-LD المحسّن مع SiteLinksSearchBox -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "@id": "https://hawachat-app.netlify.app/#app",
+          "name": "هوا شات",
+          "alternateName": ["HawaChat", "هوا شات شات عربي", "دردشة عربية"],
+          "url": "https://hawachat-app.netlify.app/",
+          "description": "منصة شات عربي مجانية للدردشة والتعارف والتواصل مع الأصدقاء في غرف دردشة حية",
+          "applicationCategory": "SocialNetworkingApplication",
+          "operatingSystem": "Web, Android, iOS",
+          "inLanguage": "ar",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+          "image": "https://hawachat-app.netlify.app/logo.png",
+          "screenshot": "https://hawachat-app.netlify.app/logo.png",
+          "keywords": "شات, دردشة, هوا شات, تعارف, تواصل, اصدقاء, شات عربي"
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://hawachat-app.netlify.app/#website",
+          "url": "https://hawachat-app.netlify.app/",
+          "name": "هوا شات",
+          "description": "شات عربي مجاني — دردشة، تعارف، تواصل، اصدقاء",
+          "inLanguage": "ar",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "https://hawachat-app.netlify.app/?q={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://hawachat-app.netlify.app/#org",
+          "name": "هوا شات",
+          "url": "https://hawachat-app.netlify.app/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://hawachat-app.netlify.app/logo.png",
+            "width": 512,
+            "height": 512
+          }
+        }
+      ]
+    }
+    </script>
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+    <link rel="shortcut icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- preconnect لتسريع الاتصال الأول -->
+    <link rel="preconnect" href="https://hawachat-app.netlify.app" crossorigin />
+    <link rel="preconnect" href="https://vokhjdjwkqmbkwmjzzbp.supabase.co" crossorigin />
+    <link rel="dns-prefetch" href="https://vokhjdjwkqmbkwmjzzbp.supabase.co" />
+    <link rel="preconnect" href="https://www.youtube-nocookie.com" crossorigin />
+    <link rel="dns-prefetch" href="https://img.youtube.com" />
+    <!-- preload لـ bundle الرئيسي — يبدأ التحميل فوراً قبل تفسير HTML -->
+    <link rel="preload" href="/_expo/static/js/web/entry-730b963e74d9a7ff15bc83f47491dff0.js" as="script" crossorigin />
+
+    <!--
+      خطوط الأيقونات — تُحمَّل من /fonts/ (مسارات ثابتة بلا هاش)
+    -->
+    <style id="icon-fonts">
+      /* Ionicons + MaterialIcons فقط — المكتبتان المستخدمتان فعلاً في الكود */
+      @font-face { font-family: 'Ionicons';       src: url('/fonts/Ionicons.ttf') format('truetype');       font-display: swap; }
+      @font-face { font-family: 'MaterialIcons';  src: url('/fonts/MaterialIcons.ttf') format('truetype');  font-display: swap; }
+    </style>
+
+    <style id="expo-reset">
+      html, body { height: 100%; margin: 0; padding: 0; }
+      body { background: #0D0D1A; }
+      /* 100dvh = الارتفاع الفعلي المرئي بدون شريط المتصفح */
+      #root { display: flex; height: 100dvh; flex: 1; background: #0D0D1A; min-height: 100dvh; }
+      /* شاشة تحميل — تظهر فوراً قبل أي JavaScript */
+      #splash {
+        position: fixed; inset: 0; z-index: 9999;
+        background: #0D0D1A;
+        display: flex; align-items: center; justify-content: center;
+        flex-direction: column; gap: 16px;
+        transition: opacity 0.35s ease;
+      }
+      #splash.hide { opacity: 0; pointer-events: none; }
+      #splash-logo {
+        width: 110px; height: 110px; border-radius: 28px;
+        overflow: hidden;
+        display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 0 40px #cc000099, 0 0 80px #cc000044;
+        animation: pulse 1.5s infinite;
+      }
+      #splash-logo img { width: 110px; height: 110px; object-fit: cover; border-radius: 28px; }
+      #splash-text {
+        color: #fff; font-size: 24px; font-weight: 800;
+        font-family: system-ui, -apple-system, sans-serif;
+        letter-spacing: 2px;
+      }
+      #splash-dots { display: flex; gap: 8px; }
+      #splash-dots span {
+        width: 9px; height: 9px; border-radius: 50%;
+        background: #9C27B0; animation: bounce 1.2s infinite;
+      }
+      #splash-dots span:nth-child(2) { animation-delay: 0.2s; }
+      #splash-dots span:nth-child(3) { animation-delay: 0.4s; }
+      @keyframes pulse {
+        0%, 100% { transform: scale(1);    box-shadow: 0 0 40px #cc000099, 0 0 80px #cc000044; }
+        50%       { transform: scale(1.07); box-shadow: 0 0 56px #ff4444bb, 0 0 100px #cc000066; }
+      }
+      @keyframes bounce {
+        0%, 80%, 100% { transform: translateY(0);  opacity: 0.4; }
+        40%            { transform: translateY(-9px); opacity: 1; }
+      }
+    </style>
+
+    <script>
+      (function () {
+        var redirect = new URLSearchParams(location.search).get('redirect');
+        if (redirect && redirect !== location.pathname) {
+          history.replaceState(null, '', redirect);
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="splash">
+      <div id="splash-logo"><img src="/logo.png" alt="هوا شات" style="border-radius:22px" /></div>
+      <div id="splash-text">هوا شات</div>
+      <div id="splash-dots"><span></span><span></span><span></span></div>
+      <div id="splash-hint" style="
+        opacity:0; transition:opacity 0.8s; margin-top:4px;
+        color:#ffffff66; font-size:12px; font-family:system-ui,sans-serif; text-align:center;
+      ">جاري التحميل... قد يستغرق بضع ثوانٍ ⏳</div>
+    </div>
+    <noscript>يجب تفعيل JavaScript لتشغيل هذا التطبيق.</noscript>
+
+    <!--
+      محتوى ثابت لمحركات البحث — مخفي بصرياً للمستخدمين
+      Googlebot يقرأ هذا قبل تنفيذ JavaScript
+    -->
+    <div id="seo-content" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;">
+      <h1>هوا شات — شات عربي مجاني | دردشة | تعارف | تواصل</h1>
+      <h2>منصة شات وتواصل اجتماعي عربية مجانية</h2>
+      <p>هوا شات هي منصة شات عربي مجانية للدردشة والتعارف والتواصل مع الأصدقاء. انضم الآن وتحدث مع آلاف المستخدمين العرب في غرف الدردشة الحية!</p>
+      <h3>مميزات هوا شات</h3>
+      <ul>
+        <li>شات عربي مجاني بدون تسجيل مدفوع</li>
+        <li>غرف دردشة جماعية للتعارف والتواصل</li>
+        <li>رسائل خاصة مشفرة بين الأصدقاء</li>
+        <li>مشاركة الصور والملصقات والمقاطع</li>
+        <li>دعم كامل للغة العربية</li>
+        <li>واجهة سهلة الاستخدام للجوال والحاسوب</li>
+        <li>تعارف وبناء صداقات جديدة</li>
+      </ul>
+      <h3>كيف تستخدم هوا شات</h3>
+      <p>سجّل مجاناً واستمتع بالشات والدردشة مع أصدقائك الجدد. هوا شات هو أفضل تطبيق شات عربي مجاني للتعارف والتواصل.</p>
+      <p>سجّل مجاناً على <a href="https://hawachat-app.netlify.app/register">صفحة التسجيل</a> أو <a href="https://hawachat-app.netlify.app/login">تسجيل الدخول</a>.</p>
+      <p>كلمات البحث: شات، دردشة، هوا شات، شات عربي، دردشة عربية، تعارف، تواصل، اصدقاء، شات مجاني، غرف شات</p>
+    </div>
+
+    <!-- زر تثبيت PWA — يظهر فوق التطبيق بعد جاهزيته -->
+    <div id="pwa-install-banner" style="
+      display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
+      z-index:99999; background:linear-gradient(135deg,#1a1a2e,#16213e);
+      border:1px solid #ffffff22; border-radius:20px; padding:12px 20px;
+      box-shadow:0 8px 32px #00000088; align-items:center; gap:12px;
+      font-family:system-ui,sans-serif; direction:rtl; max-width:340px; width:calc(100% - 32px);
+    ">
+      <img src="/logo.png" style="width:40px;height:40px;border-radius:10px;flex-shrink:0" />
+      <div style="flex:1;min-width:0">
+        <div style="color:#fff;font-size:13px;font-weight:700">ثبّت هوا شات</div>
+        <div style="color:#ffffff88;font-size:11px;margin-top:2px">استمتع بتجربة أفضل كتطبيق</div>
+      </div>
+      <button id="pwa-install-btn" style="
+        background:linear-gradient(135deg,#7B2FBE,#4A90D9); color:#fff; border:none;
+        border-radius:12px; padding:8px 16px; font-size:13px; font-weight:700; cursor:pointer;
+        white-space:nowrap; flex-shrink:0;
+      ">تثبيت</button>
+      <button onclick="document.getElementById('pwa-install-banner').style.display='none';localStorage.setItem('pwa-dismissed','1')" style="
+        background:none; border:none; color:#ffffff66; cursor:pointer; font-size:18px;
+        padding:0 4px; line-height:1; flex-shrink:0;
+      ">✕</button>
+    </div>
+
+    <div id="root"></div>
+    <script>
+      (function() {
+        var splash = document.getElementById('splash');
+        var splashHidden = false;
+
+        // ── PWA Install Prompt ──
+        var deferredPrompt = null;
+        window.addEventListener('beforeinstallprompt', function(e) {
+          e.preventDefault();
+          deferredPrompt = e;
+          // أظهر البانر فقط إذا لم يرفضه المستخدم سابقاً
+          if (!localStorage.getItem('pwa-dismissed') && !window.matchMedia('(display-mode: standalone)').matches) {
+            setTimeout(function() {
+              var banner = document.getElementById('pwa-install-banner');
+              if (banner) banner.style.display = 'flex';
+            }, 3000); // بعد 3s من فتح التطبيق
+          }
+        });
+        document.addEventListener('click', function(e) {
+          if (e.target && e.target.id === 'pwa-install-btn' && deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then(function(result) {
+              if (result.outcome === 'accepted') {
+                var banner = document.getElementById('pwa-install-banner');
+                if (banner) banner.style.display = 'none';
+              }
+              deferredPrompt = null;
+            });
+          }
+        });
+        // إخفاء البانر إذا ثُبّت التطبيق بالفعل
+        window.addEventListener('appinstalled', function() {
+          var banner = document.getElementById('pwa-install-banner');
+          if (banner) banner.style.display = 'none';
+          localStorage.setItem('pwa-dismissed', '1');
+        });
+
+        function hideSplash() {
+          if (splashHidden) return;
+          splashHidden = true;
+          var s = document.getElementById('splash');
+          if (!s) return;
+          s.style.transition = 'opacity 0.35s ease';
+          s.style.opacity = '0';
+          s.style.pointerEvents = 'none';
+          setTimeout(function() {
+            var s2 = document.getElementById('splash');
+            if (s2 && s2.parentNode) s2.parentNode.removeChild(s2);
+          }, 380);
+        }
+
+        // ── 1. React يستدعي هذه الدالة عند جاهزيته ──
+        window.__hideSplash = hideSplash;
+
+        // ── 2. بعد 2s: تلميح للاتصالات البطيئة ──
+        setTimeout(function() {
+          var hint = document.getElementById('splash-hint');
+          if (hint && !splashHidden) hint.style.opacity = '1';
+        }, 2000);
+
+        // ── 3. بعد 6s: رابط إعادة تحميل — مسح SW cache أيضاً ──
+        setTimeout(function() {
+          if (!splashHidden) {
+            var hint = document.getElementById('splash-hint');
+            if (hint) {
+              hint.innerHTML = '⚠️ يبدو أن الاتصال بطيء... <span onclick="clearAndReload()" style="color:#ff4444;cursor:pointer;text-decoration:underline">اضغط هنا لإعادة التحميل</span>';
+              hint.style.opacity = '1';
+            }
+          }
+        }, 6000);
+
+        // ── 4. بعد 15s: زر إعادة التحميل الكامل ──
+        setTimeout(function() {
+          if (splashHidden) return;
+          var s = document.getElementById('splash');
+          if (s) {
+            s.innerHTML =
+              '<div style="text-align:center;color:#fff;padding:24px;font-family:system-ui,sans-serif">' +
+              '<img src="/logo.png" style="width:90px;height:90px;border-radius:20px;margin-bottom:16px" />' +
+              '<div style="font-size:13px;color:#aaa;margin-bottom:8px">جارٍ تحميل التطبيق...</div>' +
+              '<div style="font-size:12px;color:#888;margin-bottom:24px">إذا استمرت المشكلة تحقق من اتصالك</div>' +
+              '<button onclick="clearAndReload()" style="background:linear-gradient(135deg,#cc0000,#ff4444);color:#fff;border:none;border-radius:14px;padding:12px 28px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 20px #cc000066">🔄 إعادة التحميل</button>' +
+              '</div>';
+          }
+        }, 15000);
+
+        // دالة مسح SW cache وإعادة تحميل
+        window.clearAndReload = function() {
+          if ('caches' in window) {
+            caches.keys().then(function(names) {
+              Promise.all(names.map(function(n) { return caches.delete(n); }))
+                .then(function() { window.location.reload(true); });
+            });
+          } else {
+            window.location.reload(true);
+          }
+        };
+
+      })();
+    </script>
+    <script>
+      // كاشف فشل تحميل JS: يمسح الكاش ويُخبر المستخدم — بدون reload تلقائي لمنع الحلقة
+      window.addEventListener('error', function(e) {
+        var el = e.target || e.srcElement;
+        if (el && el.tagName === 'SCRIPT' && el.src) {
+          // امسح الكاش فقط بدون reload (reload قد يُعيد نفس الخطأ)
+          if ('caches' in window) {
+            caches.keys().then(function(names) {
+              names.forEach(function(n) { caches.delete(n); });
+            });
+          }
+          // أظهر زر إعادة التحميل اليدوي بدلاً من reload التلقائي
+          setTimeout(function() {
+            if (typeof window.__hideSplash !== 'function') return; // splash موجود
+            var s = document.getElementById('splash');
+            if (s && !window.__splashHasError) {
+              window.__splashHasError = true;
+              s.innerHTML =
+                '<div style="text-align:center;color:#fff;padding:24px;font-family:system-ui,sans-serif">' +
+                '<img src="/logo.png" style="width:90px;height:90px;border-radius:20px;margin-bottom:16px" />' +
+                '<div style="font-size:14px;color:#ffaaaa;margin-bottom:8px">⚠️ خطأ في تحميل التطبيق</div>' +
+                '<div style="font-size:12px;color:#888;margin-bottom:24px">امسح بيانات المتصفح وأعد المحاولة</div>' +
+                '<button onclick="caches.keys().then(function(n){Promise.all(n.map(function(k){return caches.delete(k)}))}).then(function(){location.reload(true)})" ' +
+                'style="background:linear-gradient(135deg,#cc0000,#ff4444);color:#fff;border:none;border-radius:14px;padding:12px 28px;font-size:15px;font-weight:700;cursor:pointer">🔄 إعادة التحميل</button>' +
+                '</div>';
+            }
+          }, 2000);
+        }
+      }, true);
+    </script>
+
+    <script src="/_expo/static/js/web/entry-730b963e74d9a7ff15bc83f47491dff0.js" defer></script>
+  </body>
+</html>

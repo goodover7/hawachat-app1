@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# ملفات JS المُبنية — السماح لـ Google بفهرستها
+Allow: /_expo/static/
+
+Sitemap: https://hawachat-app.netlify.app/sitemap.xml

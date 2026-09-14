@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta name="theme-color" content="#0D0D1A" />
+  <title>تحميل هوا شات — تطبيق الدردشة العربي</title>
+  <meta name="description" content="حمّل تطبيق هوا شات مجاناً — منصة الدردشة العربية الأولى. متاح لأجهزة Android وكمتصفح ويب." />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="هوا شات — تحميل التطبيق" />
+  <meta property="og:description" content="منصة دردشة عربية مجانية. حمّل التطبيق الآن!" />
+  <meta property="og:image" content="https://hawachat.surge.sh/logo.png" />
+  <meta property="og:url" content="https://hawachat.surge.sh/download" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+
+  <link rel="icon" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0D0D1A;
+      --surface: #13132A;
+      --surface2: #1A1A35;
+      --border: #ffffff14;
+      --primary: #7B2FBE;
+      --primary2: #9B3FDE;
+      --accent: #4A90D9;
+      --text: #FFFFFF;
+      --text2: #B0B0CC;
+      --text3: #6B6B88;
+      --green: #22C55E;
+      --android: #34A853;
+    }
+
+    html, body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Animated Background ── */
+    .bg-glow {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 10%, #7B2FBE22 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, #4A90D922 0%, transparent 60%);
+    }
+
+    .container {
+      position: relative; z-index: 1;
+      max-width: 900px; margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* ── Header ── */
+    header {
+      padding: 20px 0 0;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo-small { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-small img { width: 36px; height: 36px; border-radius: 9px; }
+    .logo-small span { font-size: 18px; font-weight: 800; color: var(--text); }
+    .nav-link {
+      color: var(--text2); font-size: 14px; text-decoration: none;
+      padding: 8px 16px; border: 1px solid var(--border); border-radius: 20px;
+      transition: all 0.2s;
+    }
+    .nav-link:hover { background: var(--surface); color: var(--text); }
+
+    /* ── Hero ── */
+    .hero {
+      text-align: center; padding: 60px 0 40px;
+    }
+    .app-icon {
+      width: 120px; height: 120px; border-radius: 28px;
+      box-shadow: 0 0 60px #7B2FBE55, 0 0 120px #7B2FBE22;
+      margin: 0 auto 24px;
+      animation: iconPulse 3s ease-in-out infinite;
+    }
+    @keyframes iconPulse {
+      0%,100% { box-shadow: 0 0 60px #7B2FBE55, 0 0 120px #7B2FBE22; }
+      50%      { box-shadow: 0 0 80px #9B3FDE77, 0 0 160px #7B2FBE33; }
+    }
+    .hero h1 {
+      font-size: clamp(32px, 6vw, 52px); font-weight: 900;
+      background: linear-gradient(135deg, #fff 0%, #B57BFF 50%, #7B9FFF 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; line-height: 1.15; margin-bottom: 16px;
+    }
+    .hero p {
+      font-size: clamp(15px, 2.5vw, 18px); color: var(--text2);
+      max-width: 480px; margin: 0 auto 12px; line-height: 1.6;
+    }
+    .version-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 20px; padding: 4px 14px; font-size: 13px; color: var(--text3);
+      margin-bottom: 36px;
+    }
+    .version-badge span { color: var(--green); font-weight: 700; }
+
+    /* ── Download Cards ── */
+    .download-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px; margin-bottom: 40px;
+    }
+    .download-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px; padding: 28px 24px;
+      text-align: center; transition: all 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .download-card::before {
+      content: ''; position: absolute; inset: 0; opacity: 0;
+      background: linear-gradient(135deg, #7B2FBE11, #4A90D911);
+      transition: opacity 0.3s;
+    }
+    .download-card:hover { border-color: #7B2FBE55; transform: translateY(-3px); box-shadow: 0 12px 40px #0008; }
+    .download-card:hover::before { opacity: 1; }
+
+    .card-icon { font-size: 42px; margin-bottom: 14px; display: block; }
+    .card-title { font-size: 18px; font-weight: 800; margin-bottom: 6px; }
+    .card-desc { font-size: 13px; color: var(--text2); margin-bottom: 20px; line-height: 1.5; }
+
+    .btn-download {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 8px; width: 100%; padding: 14px 20px;
+      border-radius: 14px; font-size: 15px; font-weight: 700;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: all 0.2s; position: relative; z-index: 1;
+    }
+    .btn-android {
+      background: linear-gradient(135deg, #22A845, #34C759);
+      color: #fff; box-shadow: 0 4px 20px #22A84540;
+    }
+    .btn-android:hover { transform: scale(1.03); box-shadow: 0 6px 28px #22A84560; }
+    .btn-web {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: #fff; box-shadow: 0 4px 20px #7B2FBE40;
+    }
+    .btn-web:hover { transform: scale(1.03); box-shadow: 0 6px 28px #7B2FBE60; }
+    .btn-play {
+      background: linear-gradient(135deg, #1A73E8, #4285F4);
+      color: #fff; box-shadow: 0 4px 20px #1A73E840;
+    }
+    .btn-play:hover { transform: scale(1.03); box-shadow: 0 6px 28px #1A73E860; }
+    .btn-soon {
+      background: var(--surface2);
+      color: var(--text3); cursor: default; border: 1px solid var(--border);
+    }
+    .btn-soon:hover { transform: none; box-shadow: none; }
+
+    .file-size { font-size: 11px; color: var(--text3); margin-top: 8px; }
+
+    /* ── Features ── */
+    .features-section { padding: 20px 0 40px; }
+    .section-title {
+      font-size: 22px; font-weight: 800; text-align: center;
+      margin-bottom: 24px; color: var(--text2);
+    }
+    .features-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+    }
+    .feature-item {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 20px;
+      display: flex; align-items: flex-start; gap: 14px;
+    }
+    .feature-emoji { font-size: 26px; flex-shrink: 0; }
+    .feature-text h3 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .feature-text p { font-size: 12px; color: var(--text2); line-height: 1.5; }
+
+    /* ── Steps ── */
+    .steps-section { padding: 10px 0 40px; }
+    .steps-list { display: flex; flex-direction: column; gap: 14px; max-width: 600px; margin: 0 auto; }
+    .step-item {
+      display: flex; align-items: flex-start; gap: 16px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 18px 20px;
+    }
+    .step-num {
+      width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 900; color: #fff;
+    }
+    .step-text h3 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .step-text p { font-size: 12px; color: var(--text2); line-height: 1.5; }
+    .step-text code {
+      background: #7B2FBE22; color: #B57BFF; padding: 2px 8px;
+      border-radius: 6px; font-size: 12px; font-family: monospace;
+    }
+
+    /* ── QR Section ── */
+    .qr-section {
+      text-align: center; padding: 20px 0 50px;
+    }
+    .qr-box {
+      display: inline-flex; flex-direction: column; align-items: center; gap: 16px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 24px; padding: 32px 40px;
+    }
+    .qr-box canvas, .qr-box img { border-radius: 12px; }
+    .qr-label { font-size: 13px; color: var(--text2); }
+    .qr-url { font-size: 14px; font-weight: 700; color: var(--primary2); letter-spacing: 0.5px; }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 0; text-align: center;
+      color: var(--text3); font-size: 13px;
+    }
+    footer a { color: var(--primary2); text-decoration: none; }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .hero { padding: 40px 0 28px; }
+      .download-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 380px) {
+      .features-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-glow"></div>
+
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <a class="logo-small" href="/">
+        <img src="/logo.png" alt="هوا شات" />
+        <span>هوا شات</span>
+      </a>
+      <a class="nav-link" href="/">فتح التطبيق ←</a>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+      <img class="app-icon" src="/logo.png" alt="هوا شات" />
+      <h1>هوا شات</h1>
+      <p>منصة الدردشة العربية المجانية — تواصل مع الأصدقاء في غرف دردشة حية</p>
+      <div class="version-badge">الإصدار <span>v1.0.21</span> • مجاني 100%</div>
+
+      <!-- Download Cards -->
+      <div class="download-grid">
+        <!-- Android APK -->
+        <div class="download-card">
+          <span class="card-icon">🤖</span>
+          <div class="card-title">تطبيق Android</div>
+          <div class="card-desc">ثبّت التطبيق مباشرة على هاتفك الأندرويد بدون متجر</div>
+          <a id="apk-btn" class="btn-download btn-android" href="#apk-install">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M5 20h14v-2H5v2zm7-18L5.33 8h13.34L12 2z"/></svg>
+            تحميل APK مجاناً
+          </a>
+          <div class="file-size" id="apk-size">جاري التجهيز...</div>
+        </div>
+
+        <!-- Web App -->
+        <div class="download-card">
+          <span class="card-icon">🌐</span>
+          <div class="card-title">تطبيق الويب</div>
+          <div class="card-desc">افتح مباشرة في المتصفح — بدون تحميل على أي جهاز</div>
+          <a class="btn-download btn-web" href="https://hawachat.surge.sh" target="_blank">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            افتح في المتصفح
+          </a>
+          <div class="file-size">يعمل على iOS وAndroid وDesktop</div>
+        </div>
+
+        <!-- Google Play -->
+        <div class="download-card">
+          <span class="card-icon">▶️</span>
+          <div class="card-title">Google Play</div>
+          <div class="card-desc">قريباً على متجر جوجل بلاي — جاري المراجعة</div>
+          <span class="btn-download btn-soon">
+            🕐 قريباً على Play Store
+          </span>
+          <div class="file-size">سيُتاح قريباً</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- APK Install Steps -->
+    <section class="steps-section" id="apk-install">
+      <div class="section-title">📲 كيف تثبّت APK؟</div>
+      <div class="steps-list">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-text">
+            <h3>اضغط "تحميل APK مجاناً"</h3>
+            <p>سيبدأ تحميل ملف <code>HawaChat.apk</code> تلقائياً على جهازك</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-text">
+            <h3>فعّل "مصادر غير معروفة"</h3>
+            <p>افتح الإعدادات ← الأمان ← فعّل <code>تثبيت تطبيقات من مصادر غير معروفة</code></p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-text">
+            <h3>افتح الملف وثبّت</h3>
+            <p>اضغط على الملف المحمّل واختر "تثبيت" — لا يحتاج حساب جوجل</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-text">
+            <h3>افتح هوا شات وسجّل دخولك 🎉</h3>
+            <p>أنشئ حسابك مجاناً وانضم لغرف الدردشة فوراً</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features-section">
+      <div class="section-title">✨ لماذا هوا شات؟</div>
+      <div class="features-grid">
+        <div class="feature-item">
+          <span class="feature-emoji">💬</span>
+          <div class="feature-text">
+            <h3>غرف دردشة حية</h3>
+            <p>تحدث مع الأصدقاء في غرف دردشة جماعية مباشرة</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <span class="feature-emoji">🎁</span>
+          <div class="feature-text">
+            <h3>هدايا وعملات</h3>
+            <p>أرسل الهدايا وكسب العملات من خلال النشاط</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <span class="feature-emoji">🏆</span>
+          <div class="feature-text">
+            <h3>نظام رتب ومستويات</h3>
+            <p>ارتقِ في المستويات واحصل على رتب مميزة</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <span class="feature-emoji">🔒</span>
+          <div class="feature-text">
+            <h3>آمن ومشفّر</h3>
+            <p>بياناتك محمية بالكامل مع تشفير كامل</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <span class="feature-emoji">🌙</span>
+          <div class="feature-text">
+            <h3>واجهة داكنة أنيقة</h3>
+            <p>تصميم عربي حديث يريح عيون مرتاحة للعينين</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <span class="feature-emoji">🚀</span>
+          <div class="feature-text">
+            <h3>سريع وخفيف</h3>
+            <p>يعمل على أي هاتف حتى القديم منه</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- QR Code -->
+    <section class="qr-section">
+      <div class="section-title">📱 امسح للوصول السريع</div>
+      <div class="qr-box">
+        <canvas id="qr-canvas" width="180" height="180"></canvas>
+        <div class="qr-label">امسح بكاميرا هاتفك لفتح موقع هوا شات</div>
+        <div class="qr-url">hawachat.surge.sh</div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <p>© 2026 هوا شات — جميع الحقوق محفوظة &nbsp;|&nbsp;
+        <a href="/">الموقع الرئيسي</a> &nbsp;|&nbsp;
+        <a href="https://hawachat.surge.sh" target="_blank">افتح التطبيق</a>
+      </p>
+      <p style="margin-top:8px;color:#ffffff33;font-size:11px">
+        التطبيق مجاني تماماً — لا اشتراكات ولا إعلانات مزعجة
+      </p>
+    </footer>
+  </div>
+
+  <!-- QR Code Generator (بدون مكتبة خارجية — SVG) -->
+  <script>
+    // Simple QR via Google Chart API fallback
+    (function() {
+      var canvas = document.getElementById('qr-canvas');
+      if (!canvas) return;
+      var img = document.createElement('img');
+      img.src = 'https://api.qrserver.com/v1/create-qr-code/?data=https://hawachat.surge.sh/download&size=180x180&bgcolor=13132A&color=FFFFFF&margin=10';
+      img.width = 180; img.height = 180;
+      img.style.borderRadius = '12px';
+      img.onerror = function() { canvas.parentNode.removeChild(canvas); };
+      canvas.parentNode.replaceChild(img, canvas);
+    })();
+
+    // APK زر — يُحدَّث تلقائياً عندما يتوفر الـ APK
+    (function() {
+      var btn = document.getElementById('apk-btn');
+      var sizeEl = document.getElementById('apk-size');
+      // رابط APK — يُحدَّث هنا بعد بناء EAS
+      var APK_URL = 'https://hawachat.surge.sh/HawaChat.apk';
+      // افحص إذا الملف موجود
+      fetch(APK_URL, { method: 'HEAD' })
+        .then(function(r) {
+          if (r.ok) {
+            btn.href = APK_URL;
+            btn.setAttribute('download', 'HawaChat.apk');
+            var size = r.headers.get('content-length');
+            if (size) sizeEl.textContent = 'حجم الملف: ' + Math.round(size/1024/1024) + ' MB';
+            else sizeEl.textContent = 'جاهز للتحميل ✓';
+          } else {
+            btn.href = '#apk-install';
+            btn.innerHTML = btn.innerHTML.replace('تحميل APK مجاناً', 'قريباً — جاري البناء');
+            btn.style.opacity = '0.6';
+            btn.style.cursor = 'default';
+            sizeEl.textContent = 'سيُتاح APK قريباً بعد اكتمال البناء';
+          }
+        })
+        .catch(function() {
+          btn.href = 'https://hawachat.surge.sh';
+          btn.innerHTML = btn.innerHTML.replace('تحميل APK مجاناً', '🌐 افتح في المتصفح الآن');
+          sizeEl.textContent = 'APK قيد الإعداد — استخدم المتصفح في الوقت الراهن';
+        });
+    })();
+  </script>
+</body>
+</html>

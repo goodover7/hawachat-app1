@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- الصفحة الرئيسية — هوا شات | شات عربي | دردشة | تعارف | تواصل -->
+  <url>
+    <loc>https://hawachat-app.netlify.app/</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://hawachat-app.netlify.app/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://hawachat-app.netlify.app/"/>
+    <image:image>
+      <image:loc>https://hawachat-app.netlify.app/logo.png</image:loc>
+      <image:title>هوا شات — شات عربي مجاني</image:title>
+      <image:caption>تطبيق هوا شات للدردشة العربية وتعارف الأصدقاء</image:caption>
+    </image:image>
+  </url>
+
+  <!-- صفحة تسجيل الدخول -->
+  <url>
+    <loc>https://hawachat-app.netlify.app/login</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://hawachat-app.netlify.app/login"/>
+  </url>
+
+  <!-- صفحة التسجيل الجديد -->
+  <url>
+    <loc>https://hawachat-app.netlify.app/register</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://hawachat-app.netlify.app/register"/>
+  </url>
+
+  <!-- صفحة الشات وغرف الدردشة -->
+  <url>
+    <loc>https://hawachat-app.netlify.app/chat</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://hawachat-app.netlify.app/chat"/>
+  </url>
+
+  <!-- صفحة الاستكشاف والأصدقاء -->
+  <url>
+    <loc>https://hawachat-app.netlify.app/explore</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://hawachat-app.netlify.app/explore"/>
+  </url>
+
+  <!-- صفحة الملف الشخصي -->
+  <url>
+    <loc>https://hawachat-app.netlify.app/profile</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://hawachat-app.netlify.app/profile"/>
+  </url>
+
+</urlset>

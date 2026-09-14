@@ -1,0 +1,3 @@
+https://hawachat-app.netlify.app/
+https://hawachat-app.netlify.app/login
+https://hawachat-app.netlify.app/register
