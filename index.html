@@ -218,6 +218,27 @@
       })();
     </script>
 
+<style id="hide-public-room-search">
+  .public-room-search-removed { display: none !important; }
+</style>
+<script>
+  (function () {
+    function removeRoomSearch() {
+      var nodes = document.querySelectorAll('input, button, [role="button"], label, p, span, div');
+      nodes.forEach(function (node) {
+        var text = (node.getAttribute('placeholder') || node.getAttribute('aria-label') || node.textContent || '').trim();
+        if (!text || text.length > 80 || !/ابحث عن غرف[ةه]|بحث عن غرف[ةه]|البحث عن غرف[ةه]/.test(text)) return;
+        var target = node.closest('button, [role="button"], label') || node;
+        if (target === node && node.parentElement && node.parentElement.textContent.trim().length < 120) target = node.parentElement;
+        target.classList.add('public-room-search-removed');
+      });
+    }
+    var observer = new MutationObserver(removeRoomSearch);
+    observer.observe(document.documentElement, { childList: true, subtree: true, attributes: true });
+    setTimeout(removeRoomSearch, 300);
+    setTimeout(removeRoomSearch, 1200);
+  }());
+</script>
 </head>
   <body>
     <div id="splash">
