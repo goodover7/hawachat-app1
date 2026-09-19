@@ -447,7 +447,7 @@
     function hideProfileOptions() {
       document.querySelectorAll('div, li, button, [role="button"], p, span').forEach(function (node) {
         var text = (node.textContent || '').replace(/\s+/g, ' ').trim();
-        if (!labels.some(function (label) { return text === label || text.indexOf(label) === 0; })) return;
+        if (!labels.some(function (label) { return text === label || text.indexOf(label) === 0 || text.indexOf(label) !== -1; })) return;
         var target = node;
         for (var i = 0; i < 3 && target.parentElement && target.parentElement !== document.body; i++) {
           var parent = target.parentElement;
