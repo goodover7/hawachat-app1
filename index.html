@@ -12,6 +12,23 @@
     <meta name="color-scheme" content="dark" />
     <title>هوا شات | دردشة عربية وشات مجاني</title>
 
+    <!-- حماية الإقلاع من رفض طلبات الشبكة الاختيارية -->
+    <script>
+      window.addEventListener('unhandledrejection', function(event) {
+        var reason = event && event.reason;
+        var message = reason && (reason.message || String(reason));
+        if (message && /NetworkError|Failed to fetch|Load failed|fetch/i.test(message)) {
+          event.preventDefault();
+        }
+      });
+      window.addEventListener('error', function(event) {
+        var message = event && event.message;
+        if (message && /NetworkError|Failed to fetch|Load failed/i.test(message)) {
+          event.preventDefault();
+        }
+      });
+    </script>
+
     <!-- تسجيل Service Worker بشكل غير حاجب للإقلاع -->
     <script>
       // لا ننتظر التسجيل أو التحديث قبل تشغيل التطبيق، ولا نعيد تحميل الصفحة تلقائياً.
