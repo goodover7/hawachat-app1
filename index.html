@@ -353,10 +353,8 @@
           }
         }, 20000);
 
-        // شاشة احتياطية بعد 45s للحالات التي يفشل فيها تحميل الحزمة فعلاً.
-        setTimeout(function() {
-          if (splashHidden) return;
-          // ── زر إعادة التحميل الكامل ──
+        // شاشة احتياطية للحالات التي يفشل فيها تحميل الحزمة فعلاً.
+        // ── زر إعادة التحميل الكامل ──
         setTimeout(function() {
           if (splashHidden) return;
           var s = document.getElementById('splash');
