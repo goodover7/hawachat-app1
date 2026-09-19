@@ -438,5 +438,29 @@
     new MutationObserver(hideRoomSearch).observe(document.documentElement, { childList: true, subtree: true });
   }());
 </script>
+<style>
+  .profile-info-option-hidden { display: none !important; }
+</style>
+<script>
+  (function () {
+    var labels = ['مكافأة يومية', 'تأثير الدردشة', 'اسم VIP', 'اللقب المخصص', 'المشتريات'];
+    function hideProfileOptions() {
+      document.querySelectorAll('div, li, button, [role="button"], p, span').forEach(function (node) {
+        var text = (node.textContent || '').replace(/\s+/g, ' ').trim();
+        if (!labels.some(function (label) { return text === label; })) return;
+        var target = node;
+        for (var i = 0; i < 3 && target.parentElement && target.parentElement !== document.body; i++) {
+          var parent = target.parentElement;
+          var parentText = (parent.textContent || '').replace(/\s+/g, ' ').trim();
+          if (parentText.length <= 150) target = parent;
+          else break;
+        }
+        target.classList.add('profile-info-option-hidden');
+      });
+    }
+    hideProfileOptions();
+    new MutationObserver(hideProfileOptions).observe(document.documentElement, { childList: true, subtree: true });
+  }());
+</script>
   </body>
 </html>
