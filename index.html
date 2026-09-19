@@ -412,12 +412,15 @@
   (function () {
     if (/\/chat\//i.test(location.pathname)) return;
     function hideHomeRoomSearch() {
-      document.querySelectorAll('input, button, span, div, [role="button"], [aria-label]').forEach(function (element) {
+      document.querySelectorAll('input, button, [role="button"], [aria-label]').forEach(function (element) {
         var value = [element.getAttribute('placeholder'), element.getAttribute('aria-label'), element.textContent].filter(Boolean).join(' ').trim();
-        if (!/ابحث عن غرف[هة]|بحث عن غرف[هة]/.test(value)) return;
-        var target = element.closest('button, [role="button"]') || element;
-        if (target !== element && target !== document.body) target.classList.add('home-room-search-hidden');
-        else if (element.parentElement && element.parentElement !== document.body) element.parentElement.classList.add('home-room-search-hidden');
+        if (!/غرف/.test(value) || !/بحث|ابحث|إبحث|البحث/.test(value)) return;
+        var target = element.closest('button, [role="button"]') || element.closest('form') || element.parentElement;
+        for (var level = 0; level < 2 && target && target.parentElement && target.parentElement !== document.body; level++) {
+          var parentText = (target.parentElement.textContent || '').trim();
+          if (parentText.length < 90) target = target.parentElement;
+        }
+        if (target && target !== document.body) target.classList.add('home-room-search-hidden');
       });
     }
     hideHomeRoomSearch();
