@@ -225,6 +225,9 @@
   .voice-input-button:active { transform:scale(.94) !important; }
   .voice-input-button.is-recording { background:#e22191 !important; box-shadow:0 0 0 5px rgba(226,33,145,.18), 0 0 20px rgba(226,33,145,.5) !important; animation:voice-pulse 1.2s ease-in-out infinite !important; }
   .voice-input-button svg { width:21px; height:21px; fill:currentColor; }
+  .voice-preview { display:inline-flex; align-items:center; gap:7px; padding:4px; border-radius:12px; background:rgba(255,255,255,.08); }
+  .voice-send-button { border:0; border-radius:10px; padding:8px 10px; background:#e22191; color:#fff; font:inherit; font-size:12px; font-weight:700; cursor:pointer; }
+  .voice-send-button:disabled { opacity:.65; cursor:wait; }
   .voice-recording-status { display:none; align-items:center; gap:7px; min-width:0; color:#fff; font-size:12px; font-weight:700; white-space:nowrap; }
   .voice-recording-status.is-visible { display:inline-flex; }
   .voice-recording-dot { width:8px; height:8px; border-radius:50%; background:#ff5d9f; box-shadow:0 0 10px #ff5d9f; }
@@ -253,11 +256,29 @@
           recorder.ondataavailable = function (event) { if (event.data.size) chunks.push(event.data); };
           recorder.onstop = function () {
             stream.getTracks().forEach(function (track) { track.stop(); });
-            var audio = new Audio(URL.createObjectURL(new Blob(chunks, { type: recorder.mimeType || 'audio/webm' })));
-            audio.controls = true; audio.setAttribute('aria-label', 'معاينة الرسالة الصوتية'); audio.style.maxWidth = '180px';
+            var blob = new Blob(chunks, { type: recorder.mimeType || 'audio/webm' });
+            var audio = document.createElement('audio');
+            audio.src = URL.createObjectURL(blob); audio.controls = true; audio.setAttribute('aria-label', 'معاينة الرسالة الصوتية'); audio.style.maxWidth = '180px';
+            var preview = document.createElement('span'); preview.className = 'voice-preview'; preview.appendChild(audio);
+            var sendVoice = document.createElement('button'); sendVoice.type = 'button'; sendVoice.className = 'voice-send-button'; sendVoice.textContent = 'إرسال الصوت'; sendVoice.setAttribute('aria-label', 'إرسال الرسالة الصوتية');
+            sendVoice.addEventListener('click', function () {
+              sendVoice.disabled = true; sendVoice.textContent = 'جارٍ الإرسال...';
+              var send = field.closest('form') && field.closest('form').querySelector('button[type="submit"]');
+              if (!send) send = field.parentElement.querySelector('button[type="submit"], button[aria-label*="إرسال"], button[aria-label*="Send"]');
+              if (send) {
+                send.dataset.voiceAttachment = 'true';
+                send.click();
+                status.querySelector('span').textContent = 'تم إرسال التسجيل';
+              } else {
+                sendVoice.disabled = false; sendVoice.textContent = 'إرسال الصوت';
+                status.querySelector('span').textContent = 'تعذر العثور على زر الإرسال';
+              }
+              status.classList.add('is-visible');
+            });
+            preview.appendChild(sendVoice);
             var send = field.parentElement.querySelector('button[type="submit"], button[aria-label*="إرسال"], button[aria-label*="Send"]');
-            if (send && send.parentElement) send.parentElement.insertBefore(audio, send);
-            status.querySelector('span').textContent = 'تم تجهيز التسجيل للإرسال'; status.classList.add('is-visible');
+            if (send && send.parentElement) send.parentElement.insertBefore(preview, send);
+            status.querySelector('span').textContent = 'التسجيل جاهز للإرسال'; status.classList.add('is-visible');
           };
           recorder.start(); setState(button, status, true); status.querySelector('span').textContent = formatTime();
           timer = setInterval(function () { status.querySelector('span').textContent = formatTime(); }, 1000);
