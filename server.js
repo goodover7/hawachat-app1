@@ -1,6 +1,7 @@
 const http = require('node:http')
 const fs = require('node:fs')
 const path = require('node:path')
+const zlib = require('node:zlib')
 
 const root = __dirname
 const port = Number(process.env.PORT || 3000)
@@ -39,10 +40,23 @@ const server = http.createServer((request, response) => {
     return
   }
 
-  response.writeHead(200, {
-    'Content-Type': mimeTypes[path.extname(filePath)] || 'application/octet-stream',
-    'Cache-Control': 'no-store',
-  })
+  const extension = path.extname(filePath).toLowerCase()
+  const isHtml = extension === '.html'
+  const isStaticAsset = !isHtml && /\.(js|css|png|jpg|jpeg|svg|ico|ttf|woff|woff2|webp)$/.test(extension)
+  const acceptsGzip = /gzip/.test(request.headers['accept-encoding'] || '')
+  const headers = {
+    'Content-Type': mimeTypes[extension] || 'application/octet-stream',
+    'Cache-Control': isStaticAsset ? 'public, max-age=31536000, immutable' : 'no-cache',
+    'X-Content-Type-Options': 'nosniff',
+  }
+  if (acceptsGzip && /\.(js|css|html|json|svg)$/.test(extension)) {
+    headers['Content-Encoding'] = 'gzip'
+    headers.Vary = 'Accept-Encoding'
+    response.writeHead(200, headers)
+    fs.createReadStream(filePath).pipe(zlib.createGzip({ level: 6 })).pipe(response)
+    return
+  }
+  response.writeHead(200, headers)
   fs.createReadStream(filePath).pipe(response)
 })
 

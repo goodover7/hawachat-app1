@@ -27,26 +27,7 @@
           event.preventDefault();
         }
       });
-      // حوّل فشل الشبكة إلى استجابة قابلة للمعالجة بدل Promise مرفوضة.
-      var nativeFetch = window.fetch.bind(window);
-      window.fetch = function() {
-        return nativeFetch.apply(window, arguments).catch(function() {
-          return new Response('', { status: 503, statusText: 'Network unavailable' });
-        });
-      };
-    </script>
 
-    <!-- تسجيل Service Worker بشكل غير حاجب للإقلاع -->
-    <script>
-      // لا ننتظر التسجيل أو التحديث قبل تشغيل التطبيق، ولا نعيد تحميل الصفحة تلقائياً.
-      // إعادة التحميل أثناء controllerchange كانت تسبب حلقة إقلاع بعد كل نشر.
-      if ('serviceWorker' in navigator) {
-        // التطبيق ثابت ولا يحتاج Service Worker في المعاينة؛ تعطيله يمنع اعتراض
-        // طلبات قديمة بعد كل نشر ويزيل مصدر NetworkError المتكرر.
-        navigator.serviceWorker.getRegistrations().then(function(registrations) {
-          registrations.forEach(function(registration) { registration.unregister(); });
-        }).catch(function() {});
-      }
     </script>
 
     <!-- ══ SEO الأساسي المحسّن ══ -->
