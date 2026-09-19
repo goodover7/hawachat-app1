@@ -14,18 +14,8 @@
 
     <!-- حماية الإقلاع من رفض طلبات الشبكة الاختيارية -->
     <script>
-      // تنظيف Service Worker والـ caches القديمة التي قد تعيد اعتراض حزم أو طلبات سابقة.
-      (function () {
-        if (!('serviceWorker' in navigator)) return;
-        navigator.serviceWorker.getRegistrations().then(function (registrations) {
-          registrations.forEach(function (registration) { registration.unregister(); });
-        }).catch(function () {});
-        if ('caches' in window) {
-          caches.keys().then(function (names) {
-            names.filter(function (name) { return /^hawa-/i.test(name); }).forEach(function (name) { caches.delete(name); });
-          }).catch(function () {});
-        }
-      }());
+      // لا ننظف Service Worker أو caches أثناء الإقلاع؛ ذلك كان يؤخر أول رسم ويعيد طلبات الشبكة.
+      // التنظيف اليدوي يبقى متاحًا فقط من أدوات إصلاح التحميل عند الحاجة.
       window.addEventListener('unhandledrejection', function(event) {
         var reason = event && event.reason;
         var message = reason && (reason.message || String(reason));
@@ -167,7 +157,7 @@
         display: flex; align-items: center; justify-content: center;
         flex-direction: column; gap: 16px;
         transition: opacity 0.35s ease;
-        animation: splash-timeout 0.35s ease 5s forwards;
+        animation: splash-timeout 0.35s ease 1.8s forwards;
       }
       @keyframes splash-timeout {
         to { opacity: 0; pointer-events: none; visibility: hidden; }
@@ -339,9 +329,9 @@
         });
         setTimeout(function() {
           if (document.querySelector('#root *')) hideSplash();
-        }, 700);
-        // حد أقصى آمن يمنع بقاء شاشة البداية عالقاً إذا تأخر اتصال خارجي.
-        setTimeout(hideSplash, 4500);
+  }, 350);
+  // حد أقصى آمن يمنع بقاء شاشة البداية عالقاً إذا تأخر اتصال خارجي.
+        setTimeout(hideSplash, 2500);
 
         // تلميح هادئ بعد وقت أطول، حتى لا تظهر رسالة خطأ أثناء الإقلاع الطبيعي.
         setTimeout(function() {
