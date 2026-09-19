@@ -416,5 +416,23 @@
 
     <link rel="preload" href="/_expo/static/js/web/entry-730b963e74d9a7ff15bc83f47491dff0.js" as="script" fetchpriority="high" />
     <script src="/_expo/static/js/web/entry-730b963e74d9a7ff15bc83f47491dff0.js" defer fetchpriority="high"></script>
+<style>
+  .home-room-search-hidden { display: none !important; }
+</style>
+<script>
+  (function () {
+    if (/\/chat\//i.test(location.pathname)) return;
+    function hideRoomSearch() {
+      document.querySelectorAll('input, button, [role="button"]').forEach(function (element) {
+        var text = [element.getAttribute('placeholder'), element.getAttribute('aria-label'), element.textContent].filter(Boolean).join(' ');
+        if (!/ابحث عن غرف(?:ة|ه)?|بحث عن غرف(?:ة|ه)?/.test(text)) return;
+        var target = element.closest('button, [role="button"]') || element.closest('form') || element.parentElement;
+        if (target && target !== document.body) target.classList.add('home-room-search-hidden');
+      });
+    }
+    hideRoomSearch();
+    new MutationObserver(hideRoomSearch).observe(document.documentElement, { childList: true, subtree: true });
+  }());
+</script>
   </body>
 </html>
