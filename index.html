@@ -311,62 +311,6 @@
     setTimeout(markVoiceLobby, 1800);
   }());
 </script>
-<style id="voice-room-interior-redesign">
-  /* التصميم الداخلي لغرفة الصوت فقط، ويُفعّل بعد اكتشاف محتوى الغرفة. */
-  html.voice-room-interior { background: #07040f !important; }
-  html.voice-room-interior body { background: #07040f !important; overflow-x: hidden; }
-  html.voice-room-interior #root { background: radial-gradient(ellipse at 50% -8%, rgba(205, 35, 161, .22), transparent 38%), radial-gradient(circle at 8% 58%, rgba(80, 37, 156, .16), transparent 34%), #07040f !important; }
-  html.voice-room-interior .voice-shell { background: linear-gradient(180deg, rgba(25, 15, 50, .98), rgba(10, 6, 22, .99)) !important; border: 1px solid rgba(225, 42, 174, .28) !important; border-radius: 28px !important; box-shadow: 0 22px 70px rgba(0,0,0,.42), inset 0 1px rgba(255,255,255,.06); }
-  html.voice-room-interior .voice-topbar { background: linear-gradient(110deg, #241044, #8c196e 58%, #d62c80) !important; border-bottom: 1px solid rgba(255,255,255,.1); }
-  html.voice-room-interior .voice-title { color: #fff !important; font-size: 22px !important; font-weight: 800 !important; text-shadow: 0 4px 18px rgba(255, 61, 183, .28); }
-  html.voice-room-interior .voice-subtitle { color: #c4b5d4 !important; font-size: 13px !important; }
-  html.voice-room-interior .voice-activate { background: linear-gradient(100deg, rgba(91, 18, 126, .96), rgba(46, 17, 73, .98)) !important; border: 1px solid rgba(255, 72, 190, .52) !important; color: #ff72cc !important; border-radius: 18px !important; box-shadow: 0 12px 30px rgba(190, 20, 144, .18); }
-  html.voice-room-interior .voice-gift { background: linear-gradient(100deg, #d91a9d, #7e23c5) !important; border-radius: 18px !important; box-shadow: 0 12px 28px rgba(194, 24, 151, .2); }
-  html.voice-room-interior .voice-seat { background: linear-gradient(145deg, rgba(45, 29, 77, .88), rgba(25, 16, 51, .95)) !important; border: 1px solid rgba(196, 155, 255, .22) !important; border-radius: 22px !important; box-shadow: 0 12px 28px rgba(0,0,0,.24); }
-  html.voice-room-interior .voice-seat.voice-host { border-color: rgba(255, 200, 29, .8) !important; box-shadow: 0 0 0 2px rgba(255, 194, 25, .16), 0 14px 34px rgba(255, 90, 21, .16); }
-  html.voice-room-interior .voice-seat.voice-empty { opacity: .52; border-style: dashed !important; background: rgba(22, 14, 43, .54) !important; }
-  html.voice-room-interior .voice-chat-panel { background: rgba(18, 11, 36, .86) !important; border: 1px solid rgba(197, 121, 255, .2) !important; border-radius: 24px !important; box-shadow: 0 -12px 32px rgba(0,0,0,.18); }
-  html.voice-room-interior .voice-message { background: rgba(51, 34, 87, .9) !important; border: 1px solid rgba(216, 177, 255, .16) !important; border-radius: 16px !important; color: #fff !important; line-height: 1.75 !important; padding: 10px 14px !important; margin: 7px 0 !important; }
-  html.voice-room-interior .voice-composer { background: rgba(25, 15, 48, .98) !important; border: 1px solid rgba(198, 111, 255, .42) !important; border-radius: 22px !important; color: #fff !important; }
-  html.voice-room-interior textarea, html.voice-room-interior input { background: #17102c !important; color: #fff !important; border: 1px solid rgba(198, 111, 255, .48) !important; border-radius: 18px !important; min-height: 50px; font-size: 16px !important; }
-  html.voice-room-interior textarea::placeholder, html.voice-room-interior input::placeholder { color: #a99abd !important; }
-  html.voice-room-interior button { border-radius: 16px !important; transition: transform .18s ease, filter .18s ease; }
-  html.voice-room-interior button:active { transform: scale(.96); filter: brightness(1.12); }
-  @media (max-width: 600px) {
-    html.voice-room-interior #root { min-height: 100dvh; }
-    html.voice-room-interior .voice-seat { min-height: 134px; }
-    html.voice-room-interior .voice-message { max-width: 92%; }
-  }
-</style>
-<script>
-  (function () {
-    function markVoiceRoom() {
-      var root = document.getElementById('root');
-      if (!root) return;
-      var text = root.textContent || '';
-      var active = /صوتك مستقبلك|اضغط لتفعيل الصوت|مقعد\s*\d/.test(text);
-      document.documentElement.classList.toggle('voice-room-interior', active);
-      if (!active) return;
-      root.querySelectorAll('*').forEach(function (node) {
-        var value = (node.textContent || '').trim();
-        if (!value || value.length > 100 || node.children.length > 3) return;
-        if (/صوتك مستقبلك|غرفة الصوت/.test(value)) node.classList.add('voice-title');
-        if (/مشارك|موسيقى/.test(value)) node.classList.add('voice-subtitle');
-        if (/اضغط لتفعيل الصوت/.test(value)) node.classList.add('voice-activate');
-        if (/🎁|هدية|هدايا/.test(value)) node.classList.add('voice-gift');
-        if (/مضيف|MOATAZ/.test(value)) node.classList.add('voice-host');
-        if (/مقعد\s*[3-9]/.test(value)) node.classList.add('voice-empty');
-        if (/مقعد|مستخدم|متحدث/.test(value)) node.classList.add('voice-seat');
-        if (/اكتب تعليق|رسائل|الدردشة/.test(value)) node.classList.add('voice-chat-panel', 'voice-composer');
-      });
-      root.querySelectorAll('textarea, input').forEach(function (node) { node.classList.add('voice-composer'); });
-    }
-    var observer = new MutationObserver(markVoiceRoom);
-    observer.observe(document.documentElement, { childList: true, subtree: true });
-    setTimeout(markVoiceRoom, 400);
-    setTimeout(markVoiceRoom, 1400);
-  }());
-</script>
 </head>
   <body>
     <div id="splash">
