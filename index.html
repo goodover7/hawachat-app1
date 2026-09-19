@@ -264,15 +264,17 @@
             var send = composer && composer.querySelector('button[type="submit"], button[aria-label*="إرسال"], button[aria-label*="Send"]');
             if (!send) send = document.querySelector('button[type="submit"], button[aria-label*="إرسال"], button[aria-label*="Send"]');
             if (!send) {
-              var candidates = document.querySelectorAll('[role="button"], [aria-disabled], [tabindex="0"]');
+              var candidates = document.querySelectorAll('[role="button"], [aria-disabled], [tabindex="0"], [disabled]');
               send = Array.from(candidates).reverse().find(function (node) {
                 if (node === button || node.closest('.voice-input-wrap')) return false;
                 var label = ((node.getAttribute('aria-label') || '') + ' ' + (node.textContent || '')).trim();
-                return /إرسال|send|chat/i.test(label) || node.closest('form') === composer;
+                return /إرسال|send|chat/i.test(label) || node.closest('form') === composer || node.hasAttribute('disabled');
               });
             }
             if (send) {
               send.dataset.voiceAttachment = 'true';
+              send.removeAttribute('disabled');
+              send.disabled = false;
               send.dataset.voiceMime = blob.type;
               send.dataset.voiceUrl = audio.src;
               send.setAttribute('aria-label', 'إرسال الرسالة الصوتية');
@@ -281,6 +283,7 @@
               send.setAttribute('tabindex', '0');
               send.style.pointerEvents = 'auto';
               send.style.opacity = '1';
+              if (send.matches('[role="button"]')) send.removeAttribute('aria-disabled');
               if (send.parentElement) send.parentElement.insertBefore(preview, send);
               status.querySelector('span').textContent = 'اضغط زر إرسال الدردشة لإرسال التسجيل';
             } else {
