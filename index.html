@@ -180,6 +180,30 @@
       }
     </style>
 
+    <!-- خط واجهة مضمون: يمنع ظهور مربعات بدل العربية أو نصوص الأزرار عند تعذر تحميل خط مخصص. -->
+    <style id="ui-font-fallback">
+      @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800&display=swap');
+      html, body, #root, #root *, button, input, textarea, select, [role="button"] {
+        font-family: "Noto Sans Arabic", Arial, sans-serif !important;
+      }
+      button, [role="button"] {
+        appearance: none;
+        -webkit-appearance: none;
+        border-radius: 12px;
+        min-height: 42px;
+        border: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+      }
+      button:focus-visible, [role="button"]:focus-visible {
+        outline: 3px solid #d9a7ff;
+        outline-offset: 2px;
+      }
+    </style>
+
     <script>
       (function () {
         var redirect = new URLSearchParams(location.search).get('redirect');
