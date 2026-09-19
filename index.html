@@ -35,7 +35,14 @@
       // إعادة التحميل أثناء controllerchange كانت تسبب حلقة إقلاع بعد كل نشر.
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
-          navigator.serviceWorker.register('/sw.js?v=10', { updateViaCache: 'none' }).catch(function() {});
+          // تنظيف العمال القدامى يمنع اعتراض طلبات قديمة وإعادة محاولة الشبكة.
+          navigator.serviceWorker.getRegistrations().then(function(registrations) {
+            return Promise.all(registrations.map(function(registration) {
+              return registration.unregister();
+            }));
+          }).then(function() {
+            return navigator.serviceWorker.register('/sw.js?v=11', { updateViaCache: 'none' });
+          }).catch(function() {});
         });
       }
     </script>

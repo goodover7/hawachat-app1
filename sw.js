@@ -1,8 +1,8 @@
 // Service Worker — هوا شات v10
 // يمسح كل cache قديم فوراً عند أي تحديث
 
-const CACHE_NAME    = 'hawa-v11-static';
-const RUNTIME_CACHE = 'hawa-v11-runtime';
+const CACHE_NAME    = 'hawa-v12-static';
+const RUNTIME_CACHE = 'hawa-v12-runtime';
 // قائمة كل الإصدارات القديمة لضمان مسحها
 const OLD_CACHES = [
   'hawa-v1-static','hawa-v1-runtime',
