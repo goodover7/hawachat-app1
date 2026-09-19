@@ -53,10 +53,12 @@ const server = http.createServer((request, response) => {
   if (acceptsGzip && /\.(js|css|html|json|svg)$/.test(extension)) {
     headers['Content-Encoding'] = 'gzip'
     headers.Vary = 'Accept-Encoding'
-    let compressed = compressedCache.get(filePath)
+    const fileStat = fs.statSync(filePath)
+    const cacheEntry = compressedCache.get(filePath)
+    let compressed = cacheEntry && cacheEntry.mtimeMs === fileStat.mtimeMs ? cacheEntry.data : null
     if (!compressed) {
       compressed = zlib.gzipSync(fs.readFileSync(filePath), { level: 1 })
-      compressedCache.set(filePath, compressed)
+      compressedCache.set(filePath, { mtimeMs: fileStat.mtimeMs, data: compressed })
     }
     headers['Content-Length'] = compressed.length
     response.writeHead(200, headers)
