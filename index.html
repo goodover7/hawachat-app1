@@ -438,30 +438,5 @@
     new MutationObserver(hideHomeRoomSearch).observe(document.body, { childList: true, subtree: true });
   }());
 </script>
-<style>
-  .profile-info-option-hidden { display: none !important; }
-</style>
-<script>
-  (function () {
-    var labels = ['مكافأة يومية', 'تأثير الدردشة', 'اسم VIP', 'اللقب المخصص', 'المشتريات'];
-    function hideProfileOptions() {
-      document.querySelectorAll('div, li, button, [role="button"], p, span').forEach(function (node) {
-        var text = (node.textContent || '').trim();
-        var label = labels.find(function (item) { return text === item || text.indexOf(item) === 0; });
-        if (!label) return;
-        var target = node;
-        for (var level = 0; level < 4 && target.parentElement && target.parentElement !== document.body; level++) {
-          var parent = target.parentElement;
-          var parentText = (parent.textContent || '').trim();
-          if (parentText.length <= 180) target = parent;
-          else break;
-        }
-        target.classList.add('profile-info-option-hidden');
-      });
-    }
-    hideProfileOptions();
-    new MutationObserver(hideProfileOptions).observe(document.body, { childList: true, subtree: true });
-  }());
-</script>
   </body>
 </html>
