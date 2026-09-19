@@ -207,7 +207,7 @@
     </script>
 
 <style id="voice-lobby-redesign">
-  /* قائمة غرف الصوت فقط: لا يؤثر هذا النمط على الصفحة العامة أو غرفة الدردشة. */
+  /* قائمة غرف الصوت فقط: لا يؤثر هذا النمط على الصفحة العامة أو غرفة ال��ردشة. */
   html.voice-lobby-page [role="dialog"] {
     font-family: Tahoma, Arial, sans-serif !important;
     background: linear-gradient(180deg, #170b2d 0%, #0b0718 100%) !important;
@@ -260,7 +260,7 @@
     html.voice-lobby-page [role="dialog"] { width: min(100vw, 430px) !important; max-height: 86dvh !important; }
   }
 </style>
-<script>
+<script>/*
   (function () {
     function markVoiceLobby() {
       var dialogs = document.querySelectorAll('[role="dialog"]');
@@ -298,12 +298,17 @@
     setTimeout(markVoiceLobby, 900);
     setTimeout(markVoiceLobby, 1800);
   }());
-</script>
+*/</script>
 <style id="voice-room-interior-redesign">
   /* التصميم الداخلي لغرفة الصوت فقط، ويُفعّل بعد اكتشاف محتوى الغرفة. */
   html.voice-room-interior { background: #07040f !important; }
   html.voice-room-interior body { background: #07040f !important; overflow-x: hidden; }
   html.voice-room-interior #root { background: radial-gradient(ellipse at 50% -8%, rgba(205, 35, 161, .22), transparent 38%), radial-gradient(circle at 8% 58%, rgba(80, 37, 156, .16), transparent 34%), #07040f !important; }
+  html.voice-room-interior #root > div { background: transparent !important; }
+  html.voice-room-interior #root > div > div { border-color: rgba(220, 48, 177, .22) !important; }
+  html.voice-room-interior #root > div > div:nth-last-child(2) { background: linear-gradient(180deg, rgba(24, 14, 49, .96), rgba(8, 5, 18, .98)) !important; border-radius: 28px 28px 0 0 !important; box-shadow: 0 -18px 60px rgba(0,0,0,.28); }
+  html.voice-room-interior #root button { box-shadow: 0 8px 20px rgba(0,0,0,.18); }
+  html.voice-room-interior #root textarea { box-shadow: inset 0 1px rgba(255,255,255,.05), 0 8px 22px rgba(0,0,0,.18); }
   html.voice-room-interior .voice-shell { background: linear-gradient(180deg, rgba(25, 15, 50, .98), rgba(10, 6, 22, .99)) !important; border: 1px solid rgba(225, 42, 174, .28) !important; border-radius: 28px !important; box-shadow: 0 22px 70px rgba(0,0,0,.42), inset 0 1px rgba(255,255,255,.06); }
   html.voice-room-interior .voice-topbar { background: linear-gradient(110deg, #241044, #8c196e 58%, #d62c80) !important; border-bottom: 1px solid rgba(255,255,255,.1); }
   html.voice-room-interior .voice-title { color: #fff !important; font-size: 22px !important; font-weight: 800 !important; text-shadow: 0 4px 18px rgba(255, 61, 183, .28); }
@@ -330,24 +335,33 @@
   (function () {
     function markVoiceRoom() {
       var root = document.getElementById('root');
+      var routeIsVoice = /voice|audio|room/i.test(window.location.pathname + window.location.search);
+      if (routeIsVoice) document.documentElement.classList.add('voice-room-interior');
       if (!root) return;
       var text = root.textContent || '';
-      var active = /صوتك مستقبلك|اضغط لتفعيل الصوت|مقعد\s*\d/.test(text);
+      var active = routeIsVoice || /صوتك مستقبلك|اضغط لتفعيل الصوت|مقعد\s*\d/.test(text);
       document.documentElement.classList.toggle('voice-room-interior', active);
       if (!active) return;
       root.querySelectorAll('*').forEach(function (node) {
         var value = (node.textContent || '').trim();
         if (!value || value.length > 100 || node.children.length > 3) return;
-        if (/صوتك مستقبلك|غرفة الصوت/.test(value)) node.classList.add('voice-title');
-        if (/مشارك|موسيقى/.test(value)) node.classList.add('voice-subtitle');
-        if (/اضغط لتفعيل الصوت/.test(value)) node.classList.add('voice-activate');
-        if (/🎁|هدية|هدايا/.test(value)) node.classList.add('voice-gift');
-        if (/مضيف|MOATAZ/.test(value)) node.classList.add('voice-host');
-        if (/مقعد\s*[3-9]/.test(value)) node.classList.add('voice-empty');
-        if (/مقعد|مستخدم|متحدث/.test(value)) node.classList.add('voice-seat');
-        if (/اكتب تعليق|رسائل|الدردشة/.test(value)) node.classList.add('voice-chat-panel', 'voice-composer');
+        var target = node.closest('button, [role="button"]') || node.parentElement || node;
+        if (/صوتك مستقبلك|غرفة الصوت/.test(value)) target.classList.add('voice-title', 'voice-topbar');
+        if (/مشارك|موسيقى/.test(value)) target.classList.add('voice-subtitle');
+        if (/اضغط لتفعيل الصوت/.test(value)) target.classList.add('voice-activate');
+        if (/🎁|هدية|هدايا/.test(value)) target.classList.add('voice-gift');
+        if (/مضيف|MOATAZ/.test(value)) target.classList.add('voice-host', 'voice-seat');
+        if (/مقعد\s*[3-9]/.test(value)) target.classList.add('voice-empty', 'voice-seat');
+        if (/مقعد|مستخدم|متحدث/.test(value)) target.classList.add('voice-seat');
+        if (/اكتب تعليق|رسائل|الدردشة/.test(value)) target.classList.add('voice-chat-panel', 'voice-composer');
       });
-      root.querySelectorAll('textarea, input').forEach(function (node) { node.classList.add('voice-composer'); });
+      root.querySelectorAll('textarea, input').forEach(function (node) {
+        node.classList.add('voice-composer');
+        if (node.parentElement) node.parentElement.classList.add('voice-chat-panel');
+      });
+      root.querySelectorAll('[class*="message"], [class*="Message"], [data-message]').forEach(function (node) {
+        node.classList.add('voice-message');
+      });
     }
     var observer = new MutationObserver(markVoiceRoom);
     observer.observe(document.documentElement, { childList: true, subtree: true });
@@ -375,7 +389,7 @@
     <div id="seo-content" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;">
       <h1>هوا شات — شات عربي مجاني | دردشة | تعارف | تواصل</h1>
       <h2>منصة شات وتواصل اجتماعي عربية مجانية</h2>
-      <p>هوا شات هي منصة شات عربي مجانية للدردشة والتعارف والتواصل مع الأصدقاء. انضم الآن وتحدث مع آلاف المستخدمين العرب في غرف الدردشة الحية!</p>
+      <p>هوا شات هي منصة شات عربي مجانية للدردشة والتعارف والتواصل مع الأصدقاء. انضم الآن وتحدث م�� آلاف المستخدمين العرب في غرف الدردشة الحية!</p>
       <h3>مميزات هوا شات</h3>
       <ul>
         <li>شات عربي مجاني بدون تسجيل مدفوع</li>
@@ -507,7 +521,7 @@
               '<img src="/logo.png" style="width:90px;height:90px;border-radius:20px;margin-bottom:16px" />' +
               '<div style="font-size:13px;color:#aaa;margin-bottom:8px">جارٍ تحميل التطبيق...</div>' +
               '<div style="font-size:12px;color:#888;margin-bottom:24px">إذا استمرت المشكلة تحقق من اتصالك</div>' +
-              '<button onclick="clearAndReload()" style="background:linear-gradient(135deg,#cc0000,#ff4444);color:#fff;border:none;border-radius:14px;padding:12px 28px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 20px #cc000066">🔄 إعادة التحميل</button>' +
+              '<button onclick="clearAndReload()" style="background:linear-gradient(135deg,#cc0000,#ff4444);color:#fff;border:none;border-radius:14px;padding:12px 28px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 20px #cc000066">🔄 إ��ادة التحميل</button>' +
               '</div>';
           }
         }, 15000);
