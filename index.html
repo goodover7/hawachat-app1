@@ -218,6 +218,48 @@
       })();
     </script>
 
+<style id="online-users-polish">
+  /* تحسين بصري محافظ لقائمة المتصلين فقط — دون تغيير بنيتها أو ألوانها الأساسية. */
+  html.online-users-polish [role="dialog"] {
+    direction: rtl !important; max-height: 88dvh !important; overflow-y: auto !important;
+    border-radius: 26px !important; border: 1px solid rgba(218, 89, 210, .34) !important;
+    box-shadow: 0 20px 60px rgba(17, 3, 35, .42), inset 0 1px rgba(255,255,255,.08) !important;
+  }
+  html.online-users-polish [role="dialog"] input {
+    min-height: 46px !important; border-radius: 15px !important; padding-inline: 15px !important;
+    border: 1px solid rgba(221, 135, 255, .34) !important; outline: none !important;
+  }
+  html.online-users-polish [role="dialog"] input:focus { border-color: rgba(255, 91, 201, .8) !important; box-shadow: 0 0 0 3px rgba(232, 35, 170, .14) !important; }
+  html.online-users-polish .online-row-polish {
+    min-height: 64px !important; margin: 7px 12px !important; padding: 10px 12px !important;
+    border-radius: 18px !important; border: 1px solid rgba(214, 164, 255, .14) !important;
+    background: rgba(48, 25, 76, .42) !important; transition: transform .16s ease, border-color .16s ease !important;
+  }
+  html.online-users-polish .online-row-polish:active { transform: scale(.985); border-color: rgba(255, 84, 201, .65) !important; }
+  html.online-users-polish .online-row-polish img { border-radius: 15px !important; border: 2px solid rgba(239, 63, 190, .5) !important; }
+</style>
+<script>
+  (function () {
+    function polishOnlineUsers() {
+      var dialog = Array.from(document.querySelectorAll('[role="dialog"]')).find(function (node) {
+        return /المتصلين|الأعضاء|متصل/.test(node.textContent || '');
+      });
+      var active = !!dialog;
+      document.documentElement.classList.toggle('online-users-polish', active);
+      if (!dialog) return;
+      dialog.querySelectorAll('img').forEach(function (img) {
+        var row = img.parentElement;
+        for (var i = 0; i < 3 && row && row !== dialog; i++, row = row.parentElement) {
+          if ((row.textContent || '').trim().length > 2) row.classList.add('online-row-polish');
+        }
+      });
+    }
+    var observer = new MutationObserver(polishOnlineUsers);
+    observer.observe(document.documentElement, { childList: true, subtree: true });
+    setTimeout(polishOnlineUsers, 500);
+    setTimeout(polishOnlineUsers, 1400);
+  }());
+</script>
 </head>
   <body>
     <div id="splash">
