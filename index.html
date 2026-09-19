@@ -261,10 +261,15 @@
             audio.src = URL.createObjectURL(blob); audio.controls = true; audio.setAttribute('aria-label', 'معاينة الرسالة الصوتية'); audio.style.maxWidth = '180px';
             var preview = document.createElement('span'); preview.className = 'voice-preview'; preview.appendChild(audio);
             var composer = field.closest('form') || field.parentElement.parentElement;
-            var send = composer && composer.querySelector('button[type="submit"], button[aria-label*="إرسال"], button[aria-label*="Send"], [aria-disabled][tabindex="-1"]');
-            if (!send && composer) {
-              var candidates = composer.querySelectorAll('[tabindex="0"], [tabindex="-1"]');
-              send = candidates[candidates.length - 1];
+            var send = composer && composer.querySelector('button[type="submit"], button[aria-label*="إرسال"], button[aria-label*="Send"]');
+            if (!send) send = document.querySelector('button[type="submit"], button[aria-label*="إرسال"], button[aria-label*="Send"]');
+            if (!send) {
+              var candidates = document.querySelectorAll('[role="button"], [aria-disabled], [tabindex="0"]');
+              send = Array.from(candidates).reverse().find(function (node) {
+                if (node === button || node.closest('.voice-input-wrap')) return false;
+                var label = ((node.getAttribute('aria-label') || '') + ' ' + (node.textContent || '')).trim();
+                return /إرسال|send|chat/i.test(label) || node.closest('form') === composer;
+              });
             }
             if (send) {
               send.dataset.voiceAttachment = 'true';
