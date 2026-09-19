@@ -412,10 +412,12 @@
   (function () {
     if (/\/chat\//i.test(location.pathname)) return;
     function hideHomeRoomSearch() {
-      document.querySelectorAll('input, button, [role="button"], [aria-label]').forEach(function (element) {
+      document.querySelectorAll('input, button, span, div, [role="button"], [aria-label]').forEach(function (element) {
         var value = [element.getAttribute('placeholder'), element.getAttribute('aria-label'), element.textContent].filter(Boolean).join(' ').trim();
-        if (!/ابحث عن غرفة|بحث عن غرفة/.test(value)) return;
-        (element.closest('button, [role="button"]') || element).classList.add('home-room-search-hidden');
+        if (!/ابحث عن غرف[هة]|بحث عن غرف[هة]/.test(value)) return;
+        var target = element.closest('button, [role="button"]') || element;
+        if (target !== element && target !== document.body) target.classList.add('home-room-search-hidden');
+        else if (element.parentElement && element.parentElement !== document.body) element.parentElement.classList.add('home-room-search-hidden');
       });
     }
     hideHomeRoomSearch();
