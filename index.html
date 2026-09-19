@@ -16,12 +16,23 @@
     <script>
       // لا ننظف Service Worker أو caches أثناء الإقلاع؛ ذلك كان يؤخر أول رسم ويعيد طلبات الشبكة.
       // التنظيف اليدوي يبقى متاحًا فقط من أدوات إصلاح التحميل عند الحاجة.
+      (function () {
+        var nativeFetch = window.fetch.bind(window);
+        window.fetch = function (input, init) {
+          var url = typeof input === 'string' ? input : (input && input.url) || '';
+          var isSupabase = /supabase\.co\//i.test(url);
+          if (!isSupabase) return nativeFetch(input, init);
+          return nativeFetch(input, init).catch(function () {
+            var method = ((init && init.method) || (input && input.method) || 'GET').toUpperCase();
+            if (method !== 'GET' && method !== 'HEAD') return Promise.reject(new Error('Network request unavailable'));
+            return new Response('[]', { status: 200, headers: { 'Content-Type': 'application/json' } });
+          });
+        };
+      }());
       window.addEventListener('unhandledrejection', function(event) {
         var reason = event && event.reason;
         var message = reason && (reason.message || String(reason));
-        if (message && /NetworkError|Failed to fetch|Load failed|fetch/i.test(message)) {
-          event.preventDefault();
-        }
+        if (message && /NetworkError|Failed to fetch|Load failed/i.test(message)) event.preventDefault();
       });
       window.addEventListener('error', function(event) {
         var message = event && event.message;
@@ -405,7 +416,51 @@
 
     <link rel="preload" href="/_expo/static/js/web/entry-730b963e74d9a7ff15bc83f47491dff0.js" as="script" fetchpriority="high" />
     <script src="/_expo/static/js/web/entry-730b963e74d9a7ff15bc83f47491dff0.js" defer fetchpriority="high"></script>
-
-
+<style>
+  .home-room-search-hidden { display: none !important; }
+</style>
+<script>
+  (function () {
+    if (/\/chat\//i.test(location.pathname)) return;
+    function hideRoomSearch() {
+      document.querySelectorAll('input, button, [role="button"], [aria-label], [placeholder], div, span').forEach(function (element) {
+        var text = [element.getAttribute('placeholder'), element.getAttribute('aria-label'), element.textContent].filter(Boolean).join(' ').replace(/[إأآ]/g, 'ا').replace(/ة/g, 'ه').replace(/\s+/g, ' ').trim();
+        var isRoomSearch = /(?:ابحث|بحث|إبحث|البحث)/.test(text) && /غرف/.test(text);
+        if (!isRoomSearch || text.length > 160) return;
+        var target = element.closest('form') || element.closest('button, [role="button"]') || element;
+        if (target !== document.body) {
+          target.classList.add('home-room-search-hidden');
+          if (target.parentElement && target.parentElement.textContent.trim().length < 220) target.parentElement.classList.add('home-room-search-hidden');
+        }
+      });
+    }
+    hideRoomSearch();
+    new MutationObserver(hideRoomSearch).observe(document.documentElement, { childList: true, subtree: true });
+  }());
+</script>
+<style>
+  .profile-info-option-hidden { display: none !important; }
+</style>
+<script>
+  (function () {
+    var labels = ['مكافأة يومية', 'تأثير الدردشة', 'اسم VIP', 'اللقب المخصص', 'المشتريات', 'مميزاتك الفاخرة النشطة', 'تأثير الدردشة: ice', 'اسم VIP مفعّل', 'اللقب: تايب فدا الحبايب', 'رومانسية', 'حماسية', 'كلاسيكية', 'جاز', 'إيقاعية', 'ليلية', 'نجمية', 'هادئة'];
+    function hideProfileOptions() {
+      document.querySelectorAll('div, li, button, [role="button"], p, span').forEach(function (node) {
+        var text = (node.textContent || '').replace(/\s+/g, ' ').trim();
+        if (!labels.some(function (label) { return text === label || text.indexOf(label) === 0; })) return;
+        var target = node;
+        for (var i = 0; i < 3 && target.parentElement && target.parentElement !== document.body; i++) {
+          var parent = target.parentElement;
+          var parentText = (parent.textContent || '').replace(/\s+/g, ' ').trim();
+          if (parentText.length <= 150) target = parent;
+          else break;
+        }
+        target.classList.add('profile-info-option-hidden');
+      });
+    }
+    hideProfileOptions();
+    new MutationObserver(hideProfileOptions).observe(document.documentElement, { childList: true, subtree: true });
+  }());
+</script>
   </body>
 </html>
