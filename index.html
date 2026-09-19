@@ -260,20 +260,25 @@
             var audio = document.createElement('audio');
             audio.src = URL.createObjectURL(blob); audio.controls = true; audio.setAttribute('aria-label', 'معاينة الرسالة الصوتية'); audio.style.maxWidth = '180px';
             var preview = document.createElement('span'); preview.className = 'voice-preview'; preview.appendChild(audio);
-            var send = field.closest('form') && field.closest('form').querySelector('button[type="submit"]');
-            if (!send) send = field.parentElement.querySelector('button[type="submit"], button[aria-label*="إرسال"], button[aria-label*="Send"]');
-            if (send) {
-              send.dataset.voiceAttachment = 'true';
-              send.dataset.voiceMime = blob.type;
-              send.dataset.voiceUrl = audio.src;
-              send.setAttribute('aria-label', 'إرسال الرسالة الصوتية');
-              send.title = 'إرسال الرسالة الصوتية';
-              if (send.parentElement) send.parentElement.insertBefore(preview, send);
-              status.querySelector('span').textContent = 'اضغط زر إرسال الدردشة لإرسال التسجيل';
-            } else {
-              status.querySelector('span').textContent = 'زر إرسال الدردشة غير متاح';
-            }
-            status.classList.add('is-visible');
+            var sendVoice = document.createElement('button'); sendVoice.type = 'button'; sendVoice.className = 'voice-send-button'; sendVoice.textContent = 'إرسال الصوت'; sendVoice.setAttribute('aria-label', 'إرسال الرسالة الصوتية');
+            sendVoice.addEventListener('click', function () {
+              sendVoice.disabled = true; sendVoice.textContent = 'جارٍ الإرسال...';
+              var send = field.closest('form') && field.closest('form').querySelector('button[type="submit"]');
+              if (!send) send = field.parentElement.querySelector('button[type="submit"], button[aria-label*="إرسال"], button[aria-label*="Send"]');
+              if (send) {
+                send.dataset.voiceAttachment = 'true';
+                send.click();
+                status.querySelector('span').textContent = 'تم إرسال التسجيل';
+              } else {
+                sendVoice.disabled = false; sendVoice.textContent = 'إرسال الصوت';
+                status.querySelector('span').textContent = 'تعذر العثور على زر الإرسال';
+              }
+              status.classList.add('is-visible');
+            });
+            preview.appendChild(sendVoice);
+            var send = field.parentElement.querySelector('button[type="submit"], button[aria-label*="إرسال"], button[aria-label*="Send"]');
+            if (send && send.parentElement) send.parentElement.insertBefore(preview, send);
+            status.querySelector('span').textContent = 'التسجيل جاهز للإرسال'; status.classList.add('is-visible');
           };
           recorder.start(); setState(button, status, true); status.querySelector('span').textContent = formatTime();
           timer = setInterval(function () { status.querySelector('span').textContent = formatTime(); }, 1000);
