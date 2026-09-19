@@ -224,32 +224,6 @@
         }
       })();
     </script>
-  <style id="voice-room-redesign">
-  :root { color-scheme: dark; }
-  html, body { background: #090714 !important; }
-  body { overflow-x: hidden; }
-  #root { min-height: 100vh; background: radial-gradient(circle at 50% -10%, rgba(142, 45, 197, .24), transparent 42%), #090714; }
-  #root > div { min-height: 100vh; }
-  /* شريط الأدوات: هادئ، واضح، ومثبت أعلى الغرفة */
-  #root > div > div:first-child { background: linear-gradient(110deg, #32106c 0%, #a71983 55%, #ef277d 100%) !important; box-shadow: 0 10px 35px rgba(183, 29, 138, .22); }
-  #root button, #root [role="button"] { border-radius: 16px !important; transition: transform .2s ease, background .2s ease, box-shadow .2s ease; }
-  #root button:active, #root [role="button"]:active { transform: scale(.96); }
-  /* مساحة الرسائل: بطاقات واضحة بدل المساحة السوداء غير المقروءة */
-  #root > div > div:nth-child(2) { background: linear-gradient(180deg, rgba(18, 12, 37, .98), rgba(9, 7, 20, .98)) !important; }
-  #root > div > div:nth-child(2) > div { max-width: 980px; margin-inline: auto; }
-  #root [style*="borderRadius"] { border-color: rgba(226, 31, 157, .45) !important; box-shadow: 0 8px 28px rgba(0,0,0,.18); }
-  /* منطقة الكتابة: فصل واضح عن الرسائل وأزرار كبيرة للمس */
-  #root textarea, #root input { background: rgba(28, 19, 54, .94) !important; color: #fff !important; border: 1px solid rgba(178, 101, 255, .42) !important; border-radius: 22px !important; min-height: 48px; padding-inline: 18px !important; }
-  #root textarea::placeholder, #root input::placeholder { color: #b9add0 !important; opacity: 1; }
-  /* شريط التنقل السفلي */
-  #root > div > div:last-child { background: rgba(13, 9, 29, .96) !important; border-top: 1px solid rgba(198, 45, 175, .28); backdrop-filter: blur(18px); }
-  @media (max-width: 600px) {
-    #root > div > div:first-child { min-height: 70px; padding: 8px 12px !important; }
-    #root > div > div:nth-child(2) { padding: 14px 10px 150px !important; }
-    #root textarea, #root input { font-size: 16px !important; }
-    #root > div > div:last-child { min-height: 68px; }
-  }
-</style>
 </head>
   <body>
     <div id="splash">
