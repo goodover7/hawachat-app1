@@ -271,7 +271,7 @@
         window.addEventListener('beforeinstallprompt', function(e) {
           e.preventDefault();
           deferredPrompt = e;
-          // أظهر البانر فقط إذا لم يرفضه المستخدم سابقاً
+          // أظهر البانر فقط إذا لم يرفضه المستخدم سابق��ً
           if (!localStorage.getItem('pwa-dismissed') && !window.matchMedia('(display-mode: standalone)').matches) {
             setTimeout(function() {
               var banner = document.getElementById('pwa-install-banner');
@@ -393,5 +393,6 @@
     </script>
 
     <script src="/_expo/static/js/web/entry-730b963e74d9a7ff15bc83f47491dff0.js" defer></script>
+<style>#voice-room-redesign-panel{display:none;position:fixed;inset:0;z-index:200000;background:linear-gradient(160deg,#170d32,#090914);color:#fff;direction:rtl;font-family:system-ui,sans-serif;overflow:auto}#voice-room-redesign-panel.is-open{display:block}.vrp{max-width:760px;margin:auto;padding:22px 18px}.vrp-head{display:flex;justify-content:space-between;align-items:center}.vrp-card{margin-top:20px;padding:22px;border-radius:24px;background:linear-gradient(135deg,#7d32bd,#e82d91)}.vrp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.vrp-seat,.vrp-msg{padding:14px 8px;border-radius:18px;text-align:center;background:#ffffff12;border:1px solid #ffffff1c}.vrp-avatar{font-size:28px}.vrp-chat{display:grid;gap:10px;margin-top:14px}.vrp-msg{text-align:right}.vrp-msg b{color:#d7b2ff}.vrp-msg p{margin:4px 0;color:#ffffffb8}.vrp-close{background:#ffffff18;color:#fff;border:0;border-radius:12px;padding:8px 14px;font-size:22px}</style><div id="voice-room-redesign-panel" aria-hidden="false" style="display:block"><div class="vrp"><div class="vrp-head"><button class="vrp-close" onclick="document.getElementById('voice-room-redesign-panel').classList.remove('is-open')">×</button><h1>غرفة الصوت</h1><span>مباشر</span></div><div class="vrp-card"><h2>جلسة الأصدقاء</h2><p>تحدث واستمع وشارك لحظتك مع الجميع</p></div><h2>المتحدثون <small>4 متصلون</small></h2><div class="vrp-grid"><div class="vrp-seat"><div class="vrp-avatar">👤</div>Moataz</div><div class="vrp-seat"><div class="vrp-avatar">👩</div>سارة</div><div class="vrp-seat"><div class="vrp-avatar">👨</div>أحمد</div><div class="vrp-seat"><div class="vrp-avatar">＋</div>مقعد شاغر</div></div><h2>المحادثة</h2><div class="vrp-chat"><div class="vrp-msg"><b>سارة</b><p>أهلًا بالجميع، نورتوا الغرفة</p></div><div class="vrp-msg"><b>أحمد</b><p>أجواء جميلة اليوم</p></div></div></div></div><script>setTimeout(function(){var p=document.getElementById('voice-room-redesign-panel');if(p&&/voice|صوت/i.test(location.pathname+location.search)){p.classList.add('is-open');}},150)</script>
   </body>
 </html>
