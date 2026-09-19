@@ -16,23 +16,12 @@
     <script>
       // لا ننظف Service Worker أو caches أثناء الإقلاع؛ ذلك كان يؤخر أول رسم ويعيد طلبات الشبكة.
       // التنظيف اليدوي يبقى متاحًا فقط من أدوات إصلاح التحميل عند الحاجة.
-      (function () {
-        var nativeFetch = window.fetch.bind(window);
-        window.fetch = function (input, init) {
-          var url = typeof input === 'string' ? input : (input && input.url) || '';
-          var isSupabase = /supabase\.co\//i.test(url);
-          if (!isSupabase) return nativeFetch(input, init);
-          return nativeFetch(input, init).catch(function () {
-            var method = ((init && init.method) || (input && input.method) || 'GET').toUpperCase();
-            if (method !== 'GET' && method !== 'HEAD') return Promise.reject(new Error('Network request unavailable'));
-            return new Response('[]', { status: 200, headers: { 'Content-Type': 'application/json' } });
-          });
-        };
-      }());
       window.addEventListener('unhandledrejection', function(event) {
         var reason = event && event.reason;
         var message = reason && (reason.message || String(reason));
-        if (message && /NetworkError|Failed to fetch|Load failed/i.test(message)) event.preventDefault();
+        if (message && /NetworkError|Failed to fetch|Load failed|fetch/i.test(message)) {
+          event.preventDefault();
+        }
       });
       window.addEventListener('error', function(event) {
         var message = event && event.message;
