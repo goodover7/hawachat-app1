@@ -462,5 +462,59 @@
     new MutationObserver(hideProfileOptions).observe(document.documentElement, { childList: true, subtree: true });
   }());
 </script>
+<style id="voice-room-redesign">
+  #voice-room-redesign { position:fixed; inset:0; z-index:100000; display:none; direction:rtl; background:linear-gradient(160deg,#17112e 0%,#0b0b19 52%,#090914 100%); color:#fff; font-family:system-ui,-apple-system,sans-serif; overflow:auto; }
+  #voice-room-redesign.is-open { display:block; }
+  .vr-shell { max-width:760px; min-height:100%; margin:auto; padding:22px 18px 30px; box-sizing:border-box; }
+  .vr-top { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:24px; }
+  .vr-icon-btn { width:42px; height:42px; border:1px solid #ffffff1c; border-radius:14px; background:#ffffff0d; color:#fff; font-size:20px; cursor:pointer; }
+  .vr-title { flex:1; text-align:center; }
+  .vr-kicker { color:#c9a6ff; font-size:12px; font-weight:700; letter-spacing:.08em; }
+  .vr-title h1 { margin:3px 0 0; font-size:22px; }
+  .vr-hero { position:relative; padding:24px 20px; border:1px solid #ffffff18; border-radius:26px; background:linear-gradient(135deg,#7b35bd55,#ef318c26); box-shadow:0 18px 50px #0005; overflow:hidden; }
+  .vr-hero:after { content:""; position:absolute; width:180px; height:180px; left:-80px; top:-80px; border-radius:50%; background:#b764ff33; filter:blur(8px); }
+  .vr-room-meta { position:relative; z-index:1; display:flex; align-items:center; gap:14px; }
+  .vr-avatar { width:60px; height:60px; display:grid; place-items:center; border-radius:20px; background:linear-gradient(135deg,#ff3a9d,#7545dc); font-size:27px; box-shadow:0 0 24px #c33aff66; }
+  .vr-room-meta h2 { margin:0 0 5px; font-size:20px; }
+  .vr-room-meta p { margin:0; color:#ffffff99; font-size:13px; }
+  .vr-live { margin-right:auto; padding:6px 10px; border-radius:999px; background:#ff3d8240; color:#ff9bc4; font-size:11px; font-weight:800; }
+  .vr-section-head { display:flex; justify-content:space-between; align-items:center; margin:25px 3px 12px; }
+  .vr-section-head h3 { margin:0; font-size:16px; }
+  .vr-section-head span { color:#ffffff66; font-size:12px; }
+  .vr-stage { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; padding:18px 12px; border:1px solid #ffffff12; border-radius:22px; background:#ffffff08; }
+  .vr-seat { text-align:center; min-width:0; }
+  .vr-seat-avatar { position:relative; width:52px; height:52px; margin:0 auto 8px; display:grid; place-items:center; border-radius:18px; background:linear-gradient(135deg,#26234e,#913bd1); border:2px solid #ffffff22; font-size:22px; }
+  .vr-seat.active .vr-seat-avatar { border-color:#ff4eae; box-shadow:0 0 18px #ff4eae77; }
+  .vr-mic { position:absolute; right:-5px; bottom:-5px; width:18px; height:18px; display:grid; place-items:center; border-radius:50%; background:#23d69b; border:2px solid #17112e; font-size:10px; }
+  .vr-seat-name { display:block; color:#ffffffc7; font-size:11px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .vr-chat { display:grid; gap:9px; }
+  .vr-message { display:flex; align-items:flex-start; gap:9px; padding:11px 13px; border-radius:16px 16px 6px 16px; background:#ffffff09; border:1px solid #ffffff0d; }
+  .vr-message b { display:block; color:#d8b9ff; font-size:12px; margin-bottom:3px; }
+  .vr-message p { margin:0; color:#ffffffb3; font-size:13px; line-height:1.45; }
+  .vr-composer { position:sticky; bottom:0; display:flex; gap:9px; margin-top:20px; padding-top:12px; background:linear-gradient(#0b0b1900,#0b0b19 35%); }
+  .vr-input { flex:1; border:1px solid #ffffff18; border-radius:16px; background:#ffffff0d; color:#fff; padding:13px 15px; font:inherit; outline:none; }
+  .vr-send { border:0; border-radius:16px; padding:0 18px; background:linear-gradient(135deg,#f22f96,#7b35bd); color:#fff; font-weight:800; cursor:pointer; }
+  @media(max-width:430px){.vr-stage{grid-template-columns:repeat(4,1fr);gap:7px}.vr-seat-avatar{width:46px;height:46px}.vr-hero{padding:20px 15px}}
+</style>
+<div id="voice-room-redesign" aria-hidden="true">
+  <div class="vr-shell">
+    <div class="vr-top"><button class="vr-icon-btn" data-vr-close aria-label="إغلاق">→</button><div class="vr-title"><div class="vr-kicker">LIVE AUDIO</div><h1>غرفة الصوت</h1></div><button class="vr-icon-btn" aria-label="المزيد">⋯</button></div>
+    <section class="vr-hero"><div class="vr-room-meta"><div class="vr-avatar">◉</div><div><h2>جلسة الأصدقاء</h2><p>تواصل مباشر ومحادثة ممتعة</p></div><span class="vr-live">مباشر</span></div></section>
+    <div class="vr-section-head"><h3>المتحدثون</h3><span>4 متصلون الآن</span></div>
+    <section class="vr-stage"><div class="vr-seat active"><div class="vr-seat-avatar">👤<i class="vr-mic">●</i></div><span class="vr-seat-name">Moataz</span></div><div class="vr-seat active"><div class="vr-seat-avatar">👩<i class="vr-mic">●</i></div><span class="vr-seat-name">سارة</span></div><div class="vr-seat"><div class="vr-seat-avatar">👨</div><span class="vr-seat-name">أحمد</span></div><div class="vr-seat"><div class="vr-seat-avatar">✦</div><span class="vr-seat-name">مقعد شاغر</span></div></section>
+    <div class="vr-section-head"><h3>المحادثة</h3><span>رسائل الغرفة</span></div>
+    <section class="vr-chat"><div class="vr-message"><span>👩</span><div><b>سارة</b><p>أهلًا بالجميع، نورتوا الغرفة</p></div></div><div class="vr-message"><span>👨</span><div><b>أحمد</b><p>أجواء جميلة اليوم</p></div></div></section>
+    <form class="vr-composer"><input class="vr-input" placeholder="اكتب رسالة..." aria-label="اكتب رسالة" /><button class="vr-send" type="submit">إرسال</button></form>
+  </div>
+</div>
+<script>
+(function(){
+  var panel=document.getElementById('voice-room-redesign');
+  function open(){panel.classList.add('is-open');panel.setAttribute('aria-hidden','false');}
+  function close(){panel.classList.remove('is-open');panel.setAttribute('aria-hidden','true');}
+  document.addEventListener('click',function(e){var text=(e.target.textContent||'').trim();if(/غرفة الصوت|غرفه الصوت/.test(text)) open();if(e.target.closest('[data-vr-close]')) close();});
+  panel.querySelector('form').addEventListener('submit',function(e){e.preventDefault();var input=panel.querySelector('input');if(input.value.trim()){var item=document.createElement('div');item.className='vr-message';item.innerHTML='<span>◉</span><div><b>أنت</b><p></p></div>';item.querySelector('p').textContent=input.value.trim();panel.querySelector('.vr-chat').appendChild(item);input.value='';}});
+})();
+</script>
   </body>
 </html>
