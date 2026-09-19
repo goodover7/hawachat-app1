@@ -12,28 +12,13 @@
     <meta name="color-scheme" content="dark" />
     <title>هوا شات | دردشة عربية وشات مجاني</title>
 
-    <!-- ✅ تسجيل SW في <head> — يمسح cache قديم فوراً -->
+    <!-- تسجيل Service Worker بشكل غير حاجب للإقلاع -->
     <script>
+      // لا ننتظر التسجيل أو التحديث قبل تشغيل التطبيق، ولا نعيد تحميل الصفحة تلقائياً.
+      // إعادة التحميل أثناء controllerchange كانت تسبب حلقة إقلاع بعد كل نشر.
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js?v=9', { updateViaCache: 'none' })
-          .then(function(reg) {
-            // إذا يوجد SW جديد انتظر → أجبره على الاستخدام الفوري
-            if (reg.waiting) { reg.waiting.postMessage({ type: 'SKIP_WAITING' }); }
-            reg.addEventListener('updatefound', function() {
-              var newSW = reg.installing;
-              if (newSW) {
-                newSW.addEventListener('statechange', function() {
-                  if (newSW.state === 'installed' && reg.active) {
-                    newSW.postMessage({ type: 'SKIP_WAITING' });
-                  }
-                });
-              }
-            });
-          })
-          .catch(function(){});
-        // عند تغيير SW: reload الصفحة لأخذ النسخة الجديدة
-        navigator.serviceWorker.addEventListener('controllerchange', function() {
-          window.location.reload();
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/sw.js?v=10', { updateViaCache: 'none' }).catch(function() {});
         });
       }
     </script>
@@ -159,6 +144,10 @@
         display: flex; align-items: center; justify-content: center;
         flex-direction: column; gap: 16px;
         transition: opacity 0.35s ease;
+        animation: splash-timeout 0.35s ease 5s forwards;
+      }
+      @keyframes splash-timeout {
+        to { opacity: 0; pointer-events: none; visibility: hidden; }
       }
       #splash.hide { opacity: 0; pointer-events: none; }
       #splash-logo {
@@ -271,7 +260,7 @@
         window.addEventListener('beforeinstallprompt', function(e) {
           e.preventDefault();
           deferredPrompt = e;
-          // أظهر البانر فقط إذا لم يرفضه المستخدم سابقاً
+          // أظهر البانر فقط إذا لم يرفضه المستخدم ساب��اً
           if (!localStorage.getItem('pwa-dismissed') && !window.matchMedia('(display-mode: standalone)').matches) {
             setTimeout(function() {
               var banner = document.getElementById('pwa-install-banner');
@@ -312,27 +301,38 @@
           }, 380);
         }
 
-        // ── 1. React يستدعي هذه الدالة عند جاهزيته ──
+        // التطبيق الحالي لا يرسل إشارة جاهزية موحدة من كل المسارات، لذلك نزيل
+        // شاشة البداية بعد إتاحة أول واجهة تفاعلية بدلاً من إبقائها حتى timeout.
         window.__hideSplash = hideSplash;
+        window.addEventListener('load', function() {
+          setTimeout(hideSplash, 350);
+        });
+        setTimeout(function() {
+          if (document.querySelector('#root *')) hideSplash();
+        }, 1800);
+        // حد أقصى آمن يمنع بقاء شاشة البداية عالقاً إذا تأخر اتصال خارجي.
+        setTimeout(hideSplash, 4500);
 
-        // ── 2. بعد 2s: تلميح للاتصالات البطيئة ──
+        // تلميح هادئ بعد وقت أطول، حتى لا تظهر رسالة خطأ أثناء الإقلاع الطبيعي.
         setTimeout(function() {
           var hint = document.getElementById('splash-hint');
           if (hint && !splashHidden) hint.style.opacity = '1';
-        }, 2000);
+        }, 8000);
 
-        // ── 3. بعد 6s: رابط إعادة تحميل — مسح SW cache أيضاً ──
+        // إظهار خيار يدوي فقط بعد مهلة طويلة، دون مسح بيانات التطبيق تلقائياً.
         setTimeout(function() {
-          if (!splashHidden) {
-            var hint = document.getElementById('splash-hint');
-            if (hint) {
-              hint.innerHTML = '⚠️ يبدو أن الاتصال بطيء... <span onclick="clearAndReload()" style="color:#ff4444;cursor:pointer;text-decoration:underline">اضغط هنا لإعادة التحميل</span>';
-              hint.style.opacity = '1';
-            }
+          if (splashHidden) return;
+          var hint = document.getElementById('splash-hint');
+          if (hint) {
+            hint.innerHTML = 'ما زال التطبيق يجهّز الاتصال... <span onclick="window.location.reload()" style="color:#d9a7ff;cursor:pointer;text-decoration:underline">إعادة المحاولة</span>';
+            hint.style.opacity = '1';
           }
-        }, 6000);
+        }, 20000);
 
-        // ── 4. بعد 15s: زر إعادة التحميل الكامل ──
+        // شاشة احتياطية بعد 45s للحالات التي يفشل فيها تحميل الحزمة فعلاً.
+        setTimeout(function() {
+          if (splashHidden) return;
+          // ── زر إعادة التحميل الكامل ──
         setTimeout(function() {
           if (splashHidden) return;
           var s = document.getElementById('splash');
@@ -362,19 +362,12 @@
       })();
     </script>
     <script>
-      // كاشف فشل تحميل JS: يمسح الكاش ويُخبر المستخدم — بدون reload تلقائي لمنع الحلقة
+      // كاشف فشل تحميل JS: يترك للتطبيق فرصة الإقلاع، ثم يعرض خياراً يدوياً فقط.
       window.addEventListener('error', function(e) {
         var el = e.target || e.srcElement;
         if (el && el.tagName === 'SCRIPT' && el.src) {
-          // امسح الكاش فقط بدون reload (reload قد يُعيد نفس الخطأ)
-          if ('caches' in window) {
-            caches.keys().then(function(names) {
-              names.forEach(function(n) { caches.delete(n); });
-            });
-          }
-          // أظهر زر إعادة التحميل اليدوي بدلاً من reload التلقائي
           setTimeout(function() {
-            if (typeof window.__hideSplash !== 'function') return; // splash موجود
+            if (typeof window.__hideSplash !== 'function') return;
             var s = document.getElementById('splash');
             if (s && !window.__splashHasError) {
               window.__splashHasError = true;

@@ -25,7 +25,13 @@ const mimeTypes = {
 const server = http.createServer((request, response) => {
   const requestedPath = decodeURIComponent(request.url.split('?')[0])
   const relativePath = requestedPath === '/' ? '/index.html' : requestedPath
-  const filePath = path.resolve(root, `.${relativePath}`)
+  let filePath = path.resolve(root, `.${relativePath}`)
+
+  // دعم deep links مثل /login و /register في المعاينة، كما تفعل Netlify.
+  // نستخدم index.html فقط للمسارات غير الملفية حتى تبقى الأصول 404 صحيحة.
+  if (!fs.existsSync(filePath) && !path.extname(relativePath)) {
+    filePath = path.join(root, 'index.html')
+  }
 
   if (!filePath.startsWith(root) || !fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
     response.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' })

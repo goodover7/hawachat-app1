@@ -1,8 +1,8 @@
 // Service Worker — هوا شات v9
 // يمسح كل cache قديم فوراً عند أي تحديث
 
-const CACHE_NAME    = 'hawa-v9-static';
-const RUNTIME_CACHE = 'hawa-v9-runtime';
+const CACHE_NAME    = 'hawa-v10-static';
+const RUNTIME_CACHE = 'hawa-v10-runtime';
 // قائمة كل الإصدارات القديمة لضمان مسحها
 const OLD_CACHES = [
   'hawa-v1-static','hawa-v1-runtime',
@@ -112,16 +112,15 @@ self.addEventListener('fetch', function(e) {
     return;
   }
 
-  // HTML: network-first مع fallback
+  // HTML: شبكة مباشرة دائماً. لا نخزن صفحة الدخول كي لا تُعرض نسخة قديمة
+  // بعد نشر تحديث جديد أو أثناء انتقال Service Worker بين الإصدارات.
   if (url.endsWith('/') || url.includes('/index.html') || !url.includes('.')) {
     e.respondWith(
-      fetch(e.request).then(function(resp) {
-        if (resp && resp.status === 200) {
-          var clone = resp.clone();
-          caches.open(CACHE_NAME).then(function(c) { c.put(e.request, clone); });
-        }
-        return resp;
-      }).catch(function() { return caches.match('/index.html'); })
+      fetch(e.request, { cache: 'no-store' }).catch(function() {
+        return caches.match('/index.html').then(function(cached) {
+          return cached || new Response('Offline', { status: 503, statusText: 'Offline' });
+        });
+      })
     );
     return;
   }
