@@ -416,51 +416,7 @@
 
     <link rel="preload" href="/_expo/static/js/web/entry-730b963e74d9a7ff15bc83f47491dff0.js" as="script" fetchpriority="high" />
     <script src="/_expo/static/js/web/entry-730b963e74d9a7ff15bc83f47491dff0.js" defer fetchpriority="high"></script>
-<style>
-  .home-room-search-hidden { display: none !important; }
-</style>
-<script>
-  (function () {
-    if (/\/chat\//i.test(location.pathname)) return;
-    function hideRoomSearch() {
-      document.querySelectorAll('input, button, [role="button"], [aria-label], [placeholder], div, span').forEach(function (element) {
-        var text = [element.getAttribute('placeholder'), element.getAttribute('aria-label'), element.textContent].filter(Boolean).join(' ').replace(/[إأآ]/g, 'ا').replace(/ة/g, 'ه').replace(/\s+/g, ' ').trim();
-        var isRoomSearch = /(?:ابحث|بحث|إبحث|البحث)/.test(text) && /غرف/.test(text);
-        if (!isRoomSearch || text.length > 160) return;
-        var target = element.closest('form') || element.closest('button, [role="button"]') || element;
-        if (target !== document.body) {
-          target.classList.add('home-room-search-hidden');
-          if (target.parentElement && target.parentElement.textContent.trim().length < 220) target.parentElement.classList.add('home-room-search-hidden');
-        }
-      });
-    }
-    hideRoomSearch();
-    new MutationObserver(hideRoomSearch).observe(document.documentElement, { childList: true, subtree: true });
-  }());
-</script>
-<style>
-  .profile-info-option-hidden { display: none !important; }
-</style>
-<script>
-  (function () {
-    var labels = ['مكافأة يومية', 'تأثير الدردشة', 'اسم VIP', 'اللقب المخصص', 'المشتريات', 'مميزاتك الفاخرة النشطة', 'تأثير الدردشة: ice', 'اسم VIP مفعّل', 'اللقب: تايب فدا الحبايب', 'رومانسية', 'حماسية', 'كلاسيكية', 'جاز', 'إيقاعية', 'ليلية', 'نجمية', 'هادئة'];
-    function hideProfileOptions() {
-      document.querySelectorAll('div, li, button, [role="button"], p, span').forEach(function (node) {
-        var text = (node.textContent || '').replace(/\s+/g, ' ').trim();
-        if (!labels.some(function (label) { return text === label || text.indexOf(label) === 0 || text.indexOf(label) !== -1; })) return;
-        var target = node;
-        for (var i = 0; i < 3 && target.parentElement && target.parentElement !== document.body; i++) {
-          var parent = target.parentElement;
-          var parentText = (parent.textContent || '').replace(/\s+/g, ' ').trim();
-          if (parentText.length <= 150) target = parent;
-          else break;
-        }
-        target.classList.add('profile-info-option-hidden');
-      });
-    }
-    hideProfileOptions();
-    new MutationObserver(hideProfileOptions).observe(document.documentElement, { childList: true, subtree: true });
-  }());
-</script>
+
+
   </body>
 </html>
