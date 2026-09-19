@@ -218,6 +218,53 @@
       })();
     </script>
 
+<style id="members-list-ui">
+  /* تحسين بصري محدود لقائمة الأعضاء: لا يغيّر البيانات أو الأحداث أو بنية المكونات. */
+  [data-members-panel="true"] {
+    direction: rtl !important;
+    border-radius: 26px !important;
+    overflow: hidden auto !important;
+    border: 1px solid rgba(255,255,255,.12) !important;
+    box-shadow: 0 20px 60px rgba(0,0,0,.32) !important;
+  }
+  [data-members-panel="true"] input {
+    min-height: 44px !important;
+    border-radius: 14px !important;
+    padding-inline: 14px !important;
+    outline: none !important;
+    transition: border-color .2s ease, box-shadow .2s ease !important;
+  }
+  [data-members-panel="true"] input:focus {
+    border-color: rgba(255,255,255,.48) !important;
+    box-shadow: 0 0 0 3px rgba(255,255,255,.09) !important;
+  }
+  [data-members-panel="true"] img {
+    border-radius: 50% !important;
+    object-fit: cover !important;
+  }
+  [data-members-panel="true"] button,
+  [data-members-panel="true"] [role="button"] {
+    transition: transform .16s ease, filter .16s ease !important;
+  }
+  [data-members-panel="true"] button:active,
+  [data-members-panel="true"] [role="button"]:active { transform: scale(.97) !important; }
+</style>
+<script>
+  (function () {
+    function markMembersPanel() {
+      document.querySelectorAll('[role="dialog"]').forEach(function (dialog) {
+        var text = dialog.textContent || '';
+        var isMembers = /الأعضاء|الاعضاء|عضو/.test(text) && /متصل|غير متصل|هواء/.test(text);
+        if (isMembers) dialog.setAttribute('data-members-panel', 'true');
+        else dialog.removeAttribute('data-members-panel');
+      });
+    }
+    var observer = new MutationObserver(markMembersPanel);
+    observer.observe(document.documentElement, { childList: true, subtree: true });
+    setTimeout(markMembersPanel, 300);
+    setTimeout(markMembersPanel, 1200);
+  }());
+</script>
 </head>
   <body>
     <div id="splash">
