@@ -406,20 +406,20 @@
     <link rel="preload" href="/_expo/static/js/web/entry-730b963e74d9a7ff15bc83f47491dff0.js" as="script" fetchpriority="high" />
     <script src="/_expo/static/js/web/entry-730b963e74d9a7ff15bc83f47491dff0.js" defer fetchpriority="high"></script>
 <style>
-  .chat-room-search-hidden { display: none !important; }
+  .home-room-search-hidden { display: none !important; }
 </style>
 <script>
   (function () {
-    if (!/\/chat\//i.test(location.pathname)) return;
-    function hideChatRoomSearch() {
+    if (/\/chat\//i.test(location.pathname)) return;
+    function hideHomeRoomSearch() {
       document.querySelectorAll('input, button, [role="button"], [aria-label]').forEach(function (element) {
         var value = [element.getAttribute('placeholder'), element.getAttribute('aria-label'), element.textContent].filter(Boolean).join(' ').trim();
         if (!/ابحث عن غرفة|بحث عن غرفة/.test(value)) return;
-        (element.closest('button, [role="button"]') || element).classList.add('chat-room-search-hidden');
+        (element.closest('button, [role="button"]') || element).classList.add('home-room-search-hidden');
       });
     }
-    hideChatRoomSearch();
-    new MutationObserver(hideChatRoomSearch).observe(document.body, { childList: true, subtree: true });
+    hideHomeRoomSearch();
+    new MutationObserver(hideHomeRoomSearch).observe(document.body, { childList: true, subtree: true });
   }());
 </script>
   </body>
