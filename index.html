@@ -510,10 +510,11 @@
 <script>
 (function(){
   var panel=document.getElementById('voice-room-redesign');
-  function open(){panel.classList.add('is-open');panel.setAttribute('aria-hidden','false');}
-  function close(){panel.classList.remove('is-open');panel.setAttribute('aria-hidden','true');}
+  function open(){if(!panel)return;panel.classList.add('is-open');panel.setAttribute('aria-hidden','false');}
+  function close(){if(!panel)return;panel.classList.remove('is-open');panel.setAttribute('aria-hidden','true');}
   document.addEventListener('click',function(e){var text=(e.target.textContent||'').trim();if(/غرفة الصوت|غرفه الصوت/.test(text)) open();if(e.target.closest('[data-vr-close]')) close();});
-  panel.querySelector('form').addEventListener('submit',function(e){e.preventDefault();var input=panel.querySelector('input');if(input.value.trim()){var item=document.createElement('div');item.className='vr-message';item.innerHTML='<span>◉</span><div><b>أنت</b><p></p></div>';item.querySelector('p').textContent=input.value.trim();panel.querySelector('.vr-chat').appendChild(item);input.value='';}});
+  var form=panel && panel.querySelector('form');
+  if(form){form.addEventListener('submit',function(e){e.preventDefault();var input=panel.querySelector('input');if(input && input.value.trim()){var item=document.createElement('div');item.className='vr-message';item.innerHTML='<span>◉</span><div><b>أنت</b><p></p></div>';item.querySelector('p').textContent=input.value.trim();panel.querySelector('.vr-chat').appendChild(item);input.value='';}});}
 })();
 </script>
   </body>
