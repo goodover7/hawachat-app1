@@ -443,11 +443,11 @@
 </style>
 <script>
   (function () {
-    var labels = ['مكافأة يومية', 'تأثير الدردشة', 'اسم VIP', 'اللقب المخصص', 'المشتريات'];
+    var labels = ['مكافأة يومية', 'تأثير الدردشة', 'اسم VIP', 'اللقب المخصص', 'المشتريات', 'مميزاتك الفاخرة النشطة', 'تأثير الدردشة: ice', 'اسم VIP مفعّل', 'اللقب: تايب فدا الحبايب'];
     function hideProfileOptions() {
       document.querySelectorAll('div, li, button, [role="button"], p, span').forEach(function (node) {
         var text = (node.textContent || '').replace(/\s+/g, ' ').trim();
-        if (!labels.some(function (label) { return text === label; })) return;
+        if (!labels.some(function (label) { return text === label || text.indexOf(label) === 0; })) return;
         var target = node;
         for (var i = 0; i < 3 && target.parentElement && target.parentElement !== document.body; i++) {
           var parent = target.parentElement;
