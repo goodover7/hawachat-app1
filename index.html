@@ -238,18 +238,6 @@
 <script>
   (function () {
     var recorder = null, chunks = [], startedAt = 0, timer = null, pendingVoice = null;
-    function completeVoiceSend() {
-      if (!pendingVoice) return false;
-      var audioMessage = document.createElement('div'); audioMessage.className = 'voice-message-local';
-      var audio = document.createElement('audio'); audio.src = pendingVoice.url; audio.controls = true; audio.setAttribute('aria-label', 'رسالة صوتية');
-      audioMessage.appendChild(audio);
-      var target = document.querySelector('[data-messages], [class*="messages"], [class*="Messages"]') || document.querySelector('textarea')?.closest('form')?.parentElement;
-      if (!target) return false;
-      target.appendChild(audioMessage); pendingVoice = null;
-      document.querySelectorAll('.voice-recording-status').forEach(function (node) { node.querySelector('span').textContent = 'تم إرسال الرسالة الصوتية'; });
-      document.querySelectorAll('.voice-input-button').forEach(function (node) { node.classList.remove('is-recording'); node.setAttribute('aria-label', 'تسجيل رسالة صوتية'); node.title = 'تسجيل رسالة صوتية'; node.innerHTML = icon(true); });
-      return true;
-    }
     function icon(mic) { return mic ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21H8v2h8v-2h-3v-3.08A7 7 0 0 0 19 11h-2Z"/></svg>' : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 12 18-9-3.5 18-5.1-6.1L9 19v-6L3 12Zm3.7 0 3.9.9 4.1 2.9 1.4-7.2L6.7 12Z"/></svg>'; }
     function formatTime() { var s = Math.floor((Date.now() - startedAt) / 1000); return 'تسجيل ' + Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
     function setState(button, status, recording) { button.classList.toggle('is-recording', recording); button.setAttribute('aria-label', recording ? 'إيقاف التسجيل' : 'تسجيل رسالة صوتية'); button.innerHTML = icon(!recording); status.classList.toggle('is-visible', recording); }
@@ -280,7 +268,7 @@
             var audio = document.createElement('audio');
             audio.src = URL.createObjectURL(blob); audio.controls = true; audio.setAttribute('aria-label', 'معاينة الرسالة الصوتية'); audio.style.maxWidth = '180px';
             var preview = document.createElement('span'); preview.className = 'voice-preview'; preview.appendChild(audio);
-            pendingVoice = { audio: audio, url: audio.src };
+            pendingVoice = { audio: audio };
             button.classList.add('is-recording'); button.setAttribute('aria-label', 'إرسال الرسالة الصوتية'); button.title = 'إرسال الرسالة الصوتية'; button.innerHTML = icon(false);
             var composer = field.closest('form') || field.parentElement.parentElement;
             var send = composer && composer.querySelector('button[type="submit"], button[aria-label*="إرسال"], button[aria-label*="Send"]');
@@ -320,16 +308,6 @@
       wrap.appendChild(button); wrap.appendChild(status);
     }
     function mountVoiceInput() { document.querySelectorAll('textarea, input[type="text"]').forEach(addVoiceControl); }
-    document.addEventListener('click', function (event) {
-      if (!pendingVoice) return;
-      var target = event.target.closest('button, [role="button"], [aria-disabled], [tabindex="0"], [disabled]');
-      if (!target || target.closest('.voice-input-wrap')) return;
-      var label = ((target.getAttribute('aria-label') || '') + ' ' + (target.textContent || '')).trim();
-      var composer = document.querySelector('textarea')?.closest('form')?.parentElement;
-      if (target.hasAttribute('disabled') || target.getAttribute('aria-disabled') === 'true' || /إرسال|send|chat/i.test(label) || (composer && composer.contains(target))) {
-        event.preventDefault(); event.stopPropagation(); completeVoiceSend();
-      }
-    }, true);
     var observer = new MutationObserver(mountVoiceInput); observer.observe(document.documentElement, { childList:true, subtree:true });
     setTimeout(mountVoiceInput, 700); setTimeout(mountVoiceInput, 1800);
   }());
