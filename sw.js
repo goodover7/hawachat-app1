@@ -1,8 +1,8 @@
-// Service Worker — هوا شات v9
+// Service Worker — هوا شات v10
 // يمسح كل cache قديم فوراً عند أي تحديث
 
-const CACHE_NAME    = 'hawa-v10-static';
-const RUNTIME_CACHE = 'hawa-v10-runtime';
+const CACHE_NAME    = 'hawa-v11-static';
+const RUNTIME_CACHE = 'hawa-v11-runtime';
 // قائمة كل الإصدارات القديمة لضمان مسحها
 const OLD_CACHES = [
   'hawa-v1-static','hawa-v1-runtime',
@@ -106,6 +106,10 @@ self.addEventListener('fetch', function(e) {
             caches.open(RUNTIME_CACHE).then(function(c) { c.put(e.request, clone); });
           }
           return resp;
+        }).catch(function() {
+          return caches.match(e.request).then(function(cached) {
+            return cached || new Response('', { status: 503, statusText: 'Offline' });
+          });
         });
       })
     );
