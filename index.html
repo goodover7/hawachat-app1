@@ -208,6 +208,23 @@
       })();
     </script>
 
+<style>
+  .room-search-option-hidden { display: none !important; }
+</style>
+<script>
+  (function () {
+    function hideRoomSearch() {
+      document.querySelectorAll('input, button, [role="button"]').forEach(function (element) {
+        var label = (element.getAttribute('placeholder') || element.getAttribute('aria-label') || element.textContent || '').trim();
+        if (!/ابحث عن غرفة/.test(label)) return;
+        var container = element.closest('button, [role="button"]') || element.parentElement;
+        if (container) container.classList.add('room-search-option-hidden');
+      });
+    }
+    new MutationObserver(hideRoomSearch).observe(document.documentElement, { childList: true, subtree: true });
+    setTimeout(hideRoomSearch, 500);
+  }());
+</script>
 </head>
   <body>
     <div id="splash">
