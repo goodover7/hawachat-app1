@@ -210,17 +210,17 @@
   /* قائمة غرف الصوت فقط: لا يؤثر هذا النمط على الصفحة العامة أو غرفة الدردشة. */
   html.voice-lobby-page [role="dialog"] {
     font-family: Tahoma, Arial, sans-serif !important;
-  }
-  html.voice-lobby-page [role="dialog"] .voice-lobby-copy {
-    font-family: Tahoma, Arial, sans-serif !important;
-    font-weight: 600 !important;
-    letter-spacing: 0 !important;
     background: linear-gradient(180deg, #170b2d 0%, #0b0718 100%) !important;
     color: #fbf8ff !important;
     border: 1px solid rgba(238, 56, 184, .28) !important;
     border-radius: 30px !important;
     box-shadow: 0 26px 80px rgba(0,0,0,.55), inset 0 1px rgba(255,255,255,.08) !important;
     overflow: hidden !important;
+  }
+  html.voice-lobby-page [role="dialog"] .voice-lobby-copy {
+    font-family: Tahoma, Arial, sans-serif !important;
+    font-weight: 600 !important;
+    letter-spacing: 0 !important;
   }
   html.voice-lobby-page [role="dialog"] > div:first-child {
     background: linear-gradient(125deg, #31105e, #a80d82 62%, #ed367f) !important;
@@ -269,6 +269,7 @@
         var text = dialog.textContent || '';
         if (text.indexOf('غرف الصوت') === -1 || text.indexOf('إنشاء غرفة صوتية جديدة') === -1) return;
         found = true;
+        dialog.classList.add('voice-lobby-dialog');
         dialog.querySelectorAll('*').forEach(function (node) {
           var value = (node.textContent || '').trim();
           if (/[^\uE000-\uF8FF]*[\u0600-\u06FF]/.test(value) && value.length < 140) node.classList.add('voice-lobby-copy');
@@ -420,7 +421,7 @@
         setTimeout(function() {
           if (document.querySelector('#root *')) hideSplash();
         }, 700);
-        // حد أقصى آمن يمنع بقاء شاشة البداية عالقاً إذا تأخر اتصال خارجي.
+        // حد أقصى آمن يمنع بقاء شاشة البداية ع��لقاً إذا تأخر اتصال خارجي.
         setTimeout(hideSplash, 4500);
 
         // تلميح هادئ بعد وقت أطول، حتى لا تظهر رسالة خطأ أثناء الإقلاع الطبيعي.
