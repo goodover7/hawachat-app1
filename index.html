@@ -423,11 +423,11 @@
   (function () {
     if (/\/chat\//i.test(location.pathname)) return;
     function hideRoomSearch() {
-      document.querySelectorAll('input, button, [role="button"]').forEach(function (element) {
-        var text = [element.getAttribute('placeholder'), element.getAttribute('aria-label'), element.textContent].filter(Boolean).join(' ');
-        if (!/(?:إ|ا)?بحث\s+عن\s+(?:ال)?غرف(?:ة|ه)?/.test(text)) return;
-        var target = element.closest('button, [role="button"]') || element.closest('form') || element.parentElement;
-        if (target && target !== document.body) target.classList.add('home-room-search-hidden');
+      document.querySelectorAll('input, button, [role="button"], [aria-label], [placeholder], div, span').forEach(function (element) {
+        var text = [element.getAttribute('placeholder'), element.getAttribute('aria-label'), element.textContent].filter(Boolean).join(' ').replace(/[إأآ]/g, 'ا').replace(/ة/g, 'ه').replace(/\s+/g, ' ').trim();
+        if (!/(?:ابحث|بحث) عن (?:ال)?غرفه/.test(text) || text.length > 100) return;
+        var target = element.closest('button, [role="button"], form') || element;
+        if (target !== document.body) target.classList.add('home-room-search-hidden');
       });
     }
     hideRoomSearch();
