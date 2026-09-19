@@ -5,6 +5,7 @@ const zlib = require('node:zlib')
 
 const root = __dirname
 const port = Number(process.env.PORT || 3000)
+const compressedCache = new Map()
 const mimeTypes = {
   '.html': 'text/html; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8',
@@ -52,8 +53,14 @@ const server = http.createServer((request, response) => {
   if (acceptsGzip && /\.(js|css|html|json|svg)$/.test(extension)) {
     headers['Content-Encoding'] = 'gzip'
     headers.Vary = 'Accept-Encoding'
+    let compressed = compressedCache.get(filePath)
+    if (!compressed) {
+      compressed = zlib.gzipSync(fs.readFileSync(filePath), { level: 1 })
+      compressedCache.set(filePath, compressed)
+    }
+    headers['Content-Length'] = compressed.length
     response.writeHead(200, headers)
-    fs.createReadStream(filePath).pipe(zlib.createGzip({ level: 6 })).pipe(response)
+    response.end(compressed)
     return
   }
   response.writeHead(200, headers)

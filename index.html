@@ -206,7 +206,7 @@
       })();
     </script>
 <style id="voice-room-only-redesign">
-  /* غرفة الصوت فقط: نظام بصري فاخر ومعزول عن الصفحة العامة والقائمة. */
+  /* غرفة الصوت فقط: نظام بصري فاخر ومعزول عن الصفحة الع��مة والقائمة. */
   html.voice-room-page, html.voice-room-page body { background: #080511 !important; }
   html.voice-room-page body { overflow-x: hidden; }
   html.voice-room-page #root { background: radial-gradient(ellipse at 50% -8%, rgba(224, 33, 159, .28), transparent 36%), radial-gradient(circle at 8% 52%, rgba(73, 33, 153, .2), transparent 32%), #080511; }
@@ -422,11 +422,11 @@
         // شاشة البداية بعد إتاحة أول واجهة تفاعلية بدلاً من إبقائها حتى timeout.
         window.__hideSplash = hideSplash;
         window.addEventListener('load', function() {
-          setTimeout(hideSplash, 350);
+          setTimeout(hideSplash, 80);
         });
         setTimeout(function() {
           if (document.querySelector('#root *')) hideSplash();
-        }, 1800);
+        }, 700);
         // حد أقصى آمن يمنع بقاء شاشة البداية عالقاً إذا تأخر اتصال خارجي.
         setTimeout(hideSplash, 4500);
 
@@ -500,6 +500,7 @@
       }, true);
     </script>
 
-    <script src="/_expo/static/js/web/entry-730b963e74d9a7ff15bc83f47491dff0.js" defer></script>
+    <link rel="preload" href="/_expo/static/js/web/entry-730b963e74d9a7ff15bc83f47491dff0.js" as="script" fetchpriority="high" />
+    <script src="/_expo/static/js/web/entry-730b963e74d9a7ff15bc83f47491dff0.js" defer fetchpriority="high"></script>
   </body>
 </html>
