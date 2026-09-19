@@ -243,10 +243,8 @@
       var audioMessage = document.createElement('div'); audioMessage.className = 'voice-message-local';
       var audio = document.createElement('audio'); audio.src = pendingVoice.url; audio.controls = true; audio.setAttribute('aria-label', 'رسالة صوتية');
       audioMessage.appendChild(audio);
-      var field = document.querySelector('textarea, input[type="text"]');
-      var target = document.querySelector('[data-messages], [class*="messages"], [class*="Messages"]');
-      if (!target && field) target = field.closest('form')?.parentElement || field.parentElement?.parentElement?.parentElement;
-      if (!target) target = document.querySelector('#root') || document.body;
+      var target = document.querySelector('[data-messages], [class*="messages"], [class*="Messages"]') || document.querySelector('textarea')?.closest('form')?.parentElement;
+      if (!target) return false;
       target.appendChild(audioMessage); pendingVoice = null;
       document.querySelectorAll('.voice-recording-status').forEach(function (node) { node.querySelector('span').textContent = 'تم إرسال الرسالة الصوتية'; });
       document.querySelectorAll('.voice-input-button').forEach(function (node) { node.classList.remove('is-recording'); node.setAttribute('aria-label', 'تسجيل رسالة صوتية'); node.title = 'تسجيل رسالة صوتية'; node.innerHTML = icon(true); });
@@ -265,7 +263,9 @@
       var button = document.createElement('button'); button.type = 'button'; button.className = 'voice-input-button'; button.innerHTML = icon(true); button.setAttribute('aria-label', 'تسجيل رسالة صوتية'); button.title = 'تسجيل رسالة صوتية';
       button.addEventListener('click', async function () {
         if (pendingVoice) {
-          completeVoiceSend();
+          var audioMessage = document.createElement('div'); audioMessage.className = 'voice-message-local'; audioMessage.appendChild(pendingVoice.audio); audioMessage.appendChild(pendingVoice.audio.cloneNode(true));
+          var target = document.querySelector('[data-messages], [class*="messages"], [class*="Messages"]') || field.closest('form')?.parentElement;
+          if (target) { target.appendChild(audioMessage); pendingVoice = null; button.classList.remove('is-recording'); button.setAttribute('aria-label', 'تسجيل رسالة صوتية'); button.title = 'تسجيل رسالة صوتية'; button.innerHTML = icon(true); status.querySelector('span').textContent = 'تم إرسال الرسالة الصوتية'; }
           return;
         }
         if (recorder && recorder.state === 'recording') { stopRecording(button, status); return; }
@@ -345,7 +345,7 @@
         color:#ffffff66; font-size:12px; font-family:system-ui,sans-serif; text-align:center;
       ">جاري التحميل... قد يستغرق بضع ثوانٍ ⏳</div>
     </div>
-    <noscript>يج�� تفعيل JavaScript لتشغيل هذا التطبيق.</noscript>
+    <noscript>يجب تفعيل JavaScript لتشغيل هذا التطبيق.</noscript>
 
     <!--
       محتوى ثابت لمحركات البحث — مخفي بصرياً للمستخدمين
