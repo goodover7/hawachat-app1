@@ -14,6 +14,18 @@
 
     <!-- حماية الإقلاع من رفض طلبات الشبكة الاختيارية -->
     <script>
+      // تنظيف Service Worker والـ caches القديمة التي قد تعيد اعتراض حزم أو طلبات سابقة.
+      (function () {
+        if (!('serviceWorker' in navigator)) return;
+        navigator.serviceWorker.getRegistrations().then(function (registrations) {
+          registrations.forEach(function (registration) { registration.unregister(); });
+        }).catch(function () {});
+        if ('caches' in window) {
+          caches.keys().then(function (names) {
+            names.filter(function (name) { return /^hawa-/i.test(name); }).forEach(function (name) { caches.delete(name); });
+          }).catch(function () {});
+        }
+      }());
       window.addEventListener('unhandledrejection', function(event) {
         var reason = event && event.reason;
         var message = reason && (reason.message || String(reason));
