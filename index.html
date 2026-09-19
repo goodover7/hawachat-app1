@@ -425,9 +425,13 @@
     function hideRoomSearch() {
       document.querySelectorAll('input, button, [role="button"], [aria-label], [placeholder], div, span').forEach(function (element) {
         var text = [element.getAttribute('placeholder'), element.getAttribute('aria-label'), element.textContent].filter(Boolean).join(' ').replace(/[إأآ]/g, 'ا').replace(/ة/g, 'ه').replace(/\s+/g, ' ').trim();
-        if (!/(?:ابحث|بحث) عن (?:ال)?غرفه/.test(text) || text.length > 100) return;
-        var target = element.closest('button, [role="button"], form') || element;
-        if (target !== document.body) target.classList.add('home-room-search-hidden');
+        var isRoomSearch = /(?:ابحث|بحث|إبحث|البحث)/.test(text) && /غرف/.test(text);
+        if (!isRoomSearch || text.length > 160) return;
+        var target = element.closest('form') || element.closest('button, [role="button"]') || element;
+        if (target !== document.body) {
+          target.classList.add('home-room-search-hidden');
+          if (target.parentElement && target.parentElement.textContent.trim().length < 220) target.parentElement.classList.add('home-room-search-hidden');
+        }
       });
     }
     hideRoomSearch();
